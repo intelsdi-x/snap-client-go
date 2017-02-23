@@ -1,0 +1,190 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/intelsdi-x/snap/client"
+	"github.com/intelsdi-x/snap/client/operations"
+)
+
+func main() {
+	op := client.Default.Operations
+	pa := operations.NewGetPluginsParams()
+
+	rsp, err := op.GetPlugins(pa)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("0=====%#v\n", rsp.Payload.Plugins[1])
+
+	params := operations.NewGetPluginParamsWithTimeout(time.Second * 5)
+	params.SetPversion(int64(2))
+	params.SetPtype("collector")
+	params.SetPname("mock")
+
+	fmt.Println("GET OP= ", op)
+
+	resp, err := op.GetPlugin(params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("1=====%#v\n", resp.Payload)
+
+	pps := operations.NewGetPluginsParams()
+	res, err := op.GetPlugins(pps)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("2=====%#v\n", res.Payload.Plugins[0])
+
+	mparams := operations.NewGetMetricsParams()
+
+	rp, err := op.GetMetrics(mparams)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("3=====%#v\n", rp.Payload.Metrics[0])
+
+	// tparams := operations.NewGetTaskParams()
+	// tparams.SetID("906df0fd-9efb-4f37-8ce5-35b5c9eb152a")
+
+	// tp, err := op.GetTask(tparams)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Printf("4=======%v\n", tp.Payload)
+
+	cfparams := operations.NewGetPluginConfigItemParams()
+	cfparams.SetPname("pcm")
+	cfparams.SetPtype("collector")
+	cfparams.SetPversion(1)
+	cfg, err := op.GetPluginConfigItem(cfparams)
+	fmt.Printf("10 cfg=====%#v\n", cfg.Payload)
+
+	gcfparams := operations.NewSetPluginConfigItemParams()
+	gcfparams.SetPname("mock1")
+	gcfparams.SetPtype("collector")
+	// gcfparams.SetPversion(1)
+
+	cfgStr := `{"user":"jean", "path":"/usr/local/pcm/bin", "somebool":true, "somefloat":"3.14786", "someint":"1234567"}`
+	gcfparams.SetConfig(&cfgStr)
+
+	kk, err := op.SetPluginConfigItem(gcfparams)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("11 setcfg=====%#v\n", kk.Payload)
+
+	cfparams = operations.NewGetPluginConfigItemParams()
+	cfparams.SetPname("mock")
+	cfparams.SetPtype("collector")
+	cfg, err = op.GetPluginConfigItem(cfparams)
+	fmt.Printf("12 cfg=====%#v\n", cfg.Payload)
+
+	dcfparams := operations.NewDeletePluginConfigItemParams()
+	dcfparams.SetPname("mock")
+	dcfparams.SetPtype("collector")
+	cfgd := []string{"user", "path"}
+	dcfparams.SetConfig(cfgd)
+
+	dcfg, err := op.DeletePluginConfigItem(dcfparams)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("13 delete cfg=====%#v\n", dcfg.Payload)
+
+	cfparams = operations.NewGetPluginConfigItemParams()
+	cfparams.SetPname("mock")
+	cfparams.SetPtype("collector")
+	cfg, err = op.GetPluginConfigItem(cfparams)
+	fmt.Printf("14 cfg=====%#v\n", cfg.Payload)
+
+	// tts := operations.NewGetTasksParams()
+
+	// ttp, err := op.GetTasks(tts)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Printf("5=====%#v\n", ttp.Payload.Tasks)
+
+	// ut := operations.NewUpdateTaskStateParams()
+	// ut.SetID("d155a659-9251-4185-936e-691461701017")
+	// ut.SetAction("stop")
+
+	// ok, err := op.UpdateTaskState(ut)
+	// if err != nil {
+	// 	log.Fatal("update task state failed =======", err)
+	// }
+	// fmt.Printf("6=====%#v\n", ok)
+
+	// tk := `{"version":1,"schedule":{"type":"simple","interval":"15s"},"workflow":{"collect":{"metrics":{"/intel/mock/foo":{},"/intel/mock/bar":{},"/intel/mock/*/baz":{}},"config":{"/intel/mock":{"user":"root","password":"secret"}},"process":null,"publish":[{"plugin_name":"file","config":{"file":"/tmp/collected_swagger"}}]}}}`
+
+	// at := operations.NewAddTaskParams()
+	// at.SetTask(tk)
+
+	// o, err := op.AddTask(at)
+	// if err != nil {
+	// 	log.Fatal("create task failed =======", err)
+	// }
+	// fmt.Printf("6=====%#v\n", o)
+
+	// rep, err := http.Get(fmt.Sprintf("http://localhost:%d/v2/tasks/:%s/watch", 8181, "d155a659-9251-4185-936e-691461701017"))
+	// if err != nil {
+	// 	fmt.Println("watch task error:::::", err)
+	// }
+
+	// buf, _ := ioutil.ReadAll(rep.Body)
+	// fmt.Printf("7=====%#v\n", string(buf))
+
+	// lp := operations.NewLoadPluginParams()
+	// f, err := os.Open("/Users/egu/swagger/snap-plugin-collector-mock1")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// defer f.Close()
+	// lp.SetPluginData(f)
+
+	// k, lpl, err := op.LoadPlugin(lp)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Printf("6=====k %v, %#v\n", k, lpl.Payload)
+
+	// lp := operations.NewUnloadPluginParams()
+	// lp.SetPtype("collector")
+	// lp.SetPname("mock")
+	// lp.SetPversion(1)
+
+	// ok, cont, err := op.UnloadPlugin(lp)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Printf("6=====k %v, %#v\n", ok, cont.Payload)
+
+	////////////////////////////////////////////////
+	// 	st := `{
+	//   "tasks": [
+	//     {
+	//       "id": "80d4314d-cc00-40e4-a633-31f1c4abcdfc",
+	//       "name": "Task-80d4314d-cc00-40e4-a633-31f1c4abcdfc",
+	//       "deadline": "5s",
+	//       "creation_timestamp": 1487184311,
+	//       "last_run_timestamp": 1487187012,
+	//       "hit_count": 3,
+	//       "task_state": "Running",
+	//       "href": "http://127.0.0.1:8181/v2/tasks/80d4314d-cc00-40e4-a633-31f1c4abcdfc"
+	//     }
+	//   ]
+	// }
+	// `
+
+	// 	var m *operations.GetTaskOKBody
+	// 	err := json.Unmarshal([]byte(st), &m)
+	// 	if err != nil {
+	// 		fmt.Println("ERR=====", err)
+	// 	}
+
+	// 	fmt.Println("pl====", m.Tasks[0].Workflow)
+}
