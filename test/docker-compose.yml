@@ -1,0 +1,10 @@
+version: '2'
+services:
+  main:
+    image: candysmurfhub/snap-client-go-test:latest
+    container_name: snap-client-go-test
+    environment:
+      SNAP_VERSION: 1.1.0
+      FILE_PUB_PLUGIN_VER: 2
+    ports:
+      - "8181:8181"
