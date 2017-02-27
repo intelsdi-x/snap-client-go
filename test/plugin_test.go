@@ -19,19 +19,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package integration
+package test
 
 import (
 	"os"
 	"testing"
 
-	"github.com/intelsdi-x/snap/client"
-	"github.com/intelsdi-x/snap/client/operations"
+	"github.com/intelsdi-x/snap-client-go/client/operations"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestGetPlugins(t *testing.T) {
-	op := client.Default.Operations
+	op := getOperationClient(getHost(), snapBasePath, snapScheme)
 
 	Convey("Testing GetPlugins", t, func() {
 		Convey("Test get a list of plugins", func() {
@@ -46,7 +45,7 @@ func TestGetPlugins(t *testing.T) {
 			params := operations.NewGetPluginParams()
 			params.SetPname("mock")
 			params.SetPtype("collector")
-			params.SetPversion(int64(1))
+			params.SetPversion(int64(2))
 
 			resp, err := op.GetPlugin(params)
 			So(err, ShouldBeNil)
@@ -67,7 +66,7 @@ func TestGetPlugins(t *testing.T) {
 }
 
 func TestUnloadPlugin(t *testing.T) {
-	op := client.Default.Operations
+	op := getOperationClient(getHost(), snapBasePath, snapScheme)
 
 	Convey("Testing Unload a plugin", t, func() {
 		Convey("Test unload an existing plugin", func() {
@@ -97,22 +96,23 @@ func TestUnloadPlugin(t *testing.T) {
 }
 
 func TestLoadPlugin(t *testing.T) {
-	op := client.Default.Operations
+	op := getOperationClient(getHost(), snapBasePath, snapScheme)
 
 	Convey("Testing load a plugin", t, func() {
 		Convey("Test load an existing plugin", func() {
 			params := operations.NewLoadPluginParams()
-			f, err := os.Open("/Users/egu/swagger/snap-plugin-collector-mock1")
+			f, err := os.Open("/tmp/snap-plugin-collector-mock1")
 			if err != nil {
 				t.Fatalf("\nNo plugin to load: %v", err)
 			}
 			defer f.Close()
-			params.SetPluginData(f)
 
+			params.SetPluginData(f)
 			ok, resp, err := op.LoadPlugin(params)
 			So(err, ShouldBeNil)
 			So(ok, ShouldBeNil)
-			So(resp.Payload.Name, ShouldNotBeNil)
+			So(resp.Payload.Name, ShouldEqual, "mock")
+			So(resp.Payload.Version, ShouldEqual, 1)
 		})
 	})
 }

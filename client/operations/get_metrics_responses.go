@@ -34,6 +34,20 @@ func (o *GetMetricsReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return result, nil
 
+	case 404:
+		result := NewGetMetricsNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
+	case 500:
+		result := NewGetMetricsInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	default:
 		return nil, runtime.NewAPIError("unknown error", response, response.Code())
 	}
@@ -63,6 +77,98 @@ func (o *GetMetricsOK) readResponse(response runtime.ClientResponse, consumer ru
 		return err
 	}
 
+	return nil
+}
+
+// NewGetMetricsNotFound creates a GetMetricsNotFound with default headers values
+func NewGetMetricsNotFound() *GetMetricsNotFound {
+	return &GetMetricsNotFound{}
+}
+
+/*GetMetricsNotFound handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type GetMetricsNotFound struct {
+	Payload GetMetricsNotFoundBody
+}
+
+func (o *GetMetricsNotFound) Error() string {
+	return fmt.Sprintf("[GET /metrics][%d] getMetricsNotFound  %+v", 404, o.Payload)
+}
+
+func (o *GetMetricsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetMetricsInternalServerError creates a GetMetricsInternalServerError with default headers values
+func NewGetMetricsInternalServerError() *GetMetricsInternalServerError {
+	return &GetMetricsInternalServerError{}
+}
+
+/*GetMetricsInternalServerError handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type GetMetricsInternalServerError struct {
+	Payload GetMetricsInternalServerErrorBody
+}
+
+func (o *GetMetricsInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /metrics][%d] getMetricsInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *GetMetricsInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*GetMetricsInternalServerErrorBody get metrics internal server error body
+swagger:model GetMetricsInternalServerErrorBody
+*/
+type GetMetricsInternalServerErrorBody map[string]string
+
+// Validate validates this get metrics internal server error body
+func (o GetMetricsInternalServerErrorBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if swag.IsZero(o) { // not required
+		return nil
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+/*GetMetricsNotFoundBody get metrics not found body
+swagger:model GetMetricsNotFoundBody
+*/
+type GetMetricsNotFoundBody map[string]string
+
+// Validate validates this get metrics not found body
+func (o GetMetricsNotFoundBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if swag.IsZero(o) { // not required
+		return nil
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 

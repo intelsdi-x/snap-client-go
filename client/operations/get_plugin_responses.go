@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -29,6 +31,27 @@ func (o *GetPluginReader) ReadResponse(response runtime.ClientResponse, consumer
 			return nil, err
 		}
 		return result, nil
+
+	case 400:
+		result := NewGetPluginBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
+	case 404:
+		result := NewGetPluginNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
+	case 500:
+		result := NewGetPluginInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 
 	default:
 		return nil, runtime.NewAPIError("unknown error", response, response.Code())
@@ -61,5 +84,143 @@ func (o *GetPluginOK) readResponse(response runtime.ClientResponse, consumer run
 		return err
 	}
 
+	return nil
+}
+
+// NewGetPluginBadRequest creates a GetPluginBadRequest with default headers values
+func NewGetPluginBadRequest() *GetPluginBadRequest {
+	return &GetPluginBadRequest{}
+}
+
+/*GetPluginBadRequest handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type GetPluginBadRequest struct {
+	Payload GetPluginBadRequestBody
+}
+
+func (o *GetPluginBadRequest) Error() string {
+	return fmt.Sprintf("[GET /plugins/{ptype}/{pname}/{pversion}][%d] getPluginBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *GetPluginBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetPluginNotFound creates a GetPluginNotFound with default headers values
+func NewGetPluginNotFound() *GetPluginNotFound {
+	return &GetPluginNotFound{}
+}
+
+/*GetPluginNotFound handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type GetPluginNotFound struct {
+	Payload GetPluginNotFoundBody
+}
+
+func (o *GetPluginNotFound) Error() string {
+	return fmt.Sprintf("[GET /plugins/{ptype}/{pname}/{pversion}][%d] getPluginNotFound  %+v", 404, o.Payload)
+}
+
+func (o *GetPluginNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetPluginInternalServerError creates a GetPluginInternalServerError with default headers values
+func NewGetPluginInternalServerError() *GetPluginInternalServerError {
+	return &GetPluginInternalServerError{}
+}
+
+/*GetPluginInternalServerError handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type GetPluginInternalServerError struct {
+	Payload GetPluginInternalServerErrorBody
+}
+
+func (o *GetPluginInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /plugins/{ptype}/{pname}/{pversion}][%d] getPluginInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *GetPluginInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*GetPluginBadRequestBody get plugin bad request body
+swagger:model GetPluginBadRequestBody
+*/
+type GetPluginBadRequestBody map[string]string
+
+// Validate validates this get plugin bad request body
+func (o GetPluginBadRequestBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if swag.IsZero(o) { // not required
+		return nil
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+/*GetPluginInternalServerErrorBody get plugin internal server error body
+swagger:model GetPluginInternalServerErrorBody
+*/
+type GetPluginInternalServerErrorBody map[string]string
+
+// Validate validates this get plugin internal server error body
+func (o GetPluginInternalServerErrorBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if swag.IsZero(o) { // not required
+		return nil
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+/*GetPluginNotFoundBody get plugin not found body
+swagger:model GetPluginNotFoundBody
+*/
+type GetPluginNotFoundBody map[string]string
+
+// Validate validates this get plugin not found body
+func (o GetPluginNotFoundBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if swag.IsZero(o) { // not required
+		return nil
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }

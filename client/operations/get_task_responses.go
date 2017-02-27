@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -29,6 +31,13 @@ func (o *GetTaskReader) ReadResponse(response runtime.ClientResponse, consumer r
 			return nil, err
 		}
 		return result, nil
+
+	case 404:
+		result := NewGetTaskNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 
 	default:
 		return nil, runtime.NewAPIError("unknown error", response, response.Code())
@@ -61,5 +70,51 @@ func (o *GetTaskOK) readResponse(response runtime.ClientResponse, consumer runti
 		return err
 	}
 
+	return nil
+}
+
+// NewGetTaskNotFound creates a GetTaskNotFound with default headers values
+func NewGetTaskNotFound() *GetTaskNotFound {
+	return &GetTaskNotFound{}
+}
+
+/*GetTaskNotFound handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type GetTaskNotFound struct {
+	Payload GetTaskNotFoundBody
+}
+
+func (o *GetTaskNotFound) Error() string {
+	return fmt.Sprintf("[GET /tasks/{id}][%d] getTaskNotFound  %+v", 404, o.Payload)
+}
+
+func (o *GetTaskNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*GetTaskNotFoundBody get task not found body
+swagger:model GetTaskNotFoundBody
+*/
+type GetTaskNotFoundBody map[string]string
+
+// Validate validates this get task not found body
+func (o GetTaskNotFoundBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if swag.IsZero(o) { // not required
+		return nil
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }

@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
-
-	"github.com/intelsdi-x/snap-client-go/models"
 )
 
 // SetPluginConfigItemReader is a Reader for the SetPluginConfigItem structure.
@@ -30,6 +30,13 @@ func (o *SetPluginConfigItemReader) ReadResponse(response runtime.ClientResponse
 		}
 		return result, nil
 
+	case 400:
+		result := NewSetPluginConfigItemBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	default:
 		return nil, runtime.NewAPIError("unknown error", response, response.Code())
 	}
@@ -45,19 +52,59 @@ func NewSetPluginConfigItemOK() *SetPluginConfigItemOK {
 PluginConfigItem represents cdata.ConfigDataNode which implements it's own UnmarshalJSON.
 */
 type SetPluginConfigItemOK struct {
-	Payload models.ConfigDataNode
 }
 
 func (o *SetPluginConfigItemOK) Error() string {
-	return fmt.Sprintf("[PUT /plugins/{ptype}/{pname}/{pversion}/config][%d] setPluginConfigItemOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /plugins/{ptype}/{pname}/{pversion}/config][%d] setPluginConfigItemOK ", 200)
 }
 
 func (o *SetPluginConfigItemOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewSetPluginConfigItemBadRequest creates a SetPluginConfigItemBadRequest with default headers values
+func NewSetPluginConfigItemBadRequest() *SetPluginConfigItemBadRequest {
+	return &SetPluginConfigItemBadRequest{}
+}
+
+/*SetPluginConfigItemBadRequest handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type SetPluginConfigItemBadRequest struct {
+	Payload SetPluginConfigItemBadRequestBody
+}
+
+func (o *SetPluginConfigItemBadRequest) Error() string {
+	return fmt.Sprintf("[PUT /plugins/{ptype}/{pname}/{pversion}/config][%d] setPluginConfigItemBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *SetPluginConfigItemBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
+	return nil
+}
+
+/*SetPluginConfigItemBadRequestBody set plugin config item bad request body
+swagger:model SetPluginConfigItemBadRequestBody
+*/
+type SetPluginConfigItemBadRequestBody map[string]string
+
+// Validate validates this set plugin config item bad request body
+func (o SetPluginConfigItemBadRequestBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if swag.IsZero(o) { // not required
+		return nil
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }

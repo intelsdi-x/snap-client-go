@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -29,6 +31,20 @@ func (o *WatchTaskReader) ReadResponse(response runtime.ClientResponse, consumer
 			return nil, err
 		}
 		return result, nil
+
+	case 404:
+		result := NewWatchTaskNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
+	case 500:
+		result := NewWatchTaskInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 
 	default:
 		return nil, runtime.NewAPIError("unknown error", response, response.Code())
@@ -61,5 +77,97 @@ func (o *WatchTaskOK) readResponse(response runtime.ClientResponse, consumer run
 		return err
 	}
 
+	return nil
+}
+
+// NewWatchTaskNotFound creates a WatchTaskNotFound with default headers values
+func NewWatchTaskNotFound() *WatchTaskNotFound {
+	return &WatchTaskNotFound{}
+}
+
+/*WatchTaskNotFound handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type WatchTaskNotFound struct {
+	Payload WatchTaskNotFoundBody
+}
+
+func (o *WatchTaskNotFound) Error() string {
+	return fmt.Sprintf("[GET /tasks/{id}/watch][%d] watchTaskNotFound  %+v", 404, o.Payload)
+}
+
+func (o *WatchTaskNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewWatchTaskInternalServerError creates a WatchTaskInternalServerError with default headers values
+func NewWatchTaskInternalServerError() *WatchTaskInternalServerError {
+	return &WatchTaskInternalServerError{}
+}
+
+/*WatchTaskInternalServerError handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type WatchTaskInternalServerError struct {
+	Payload WatchTaskInternalServerErrorBody
+}
+
+func (o *WatchTaskInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /tasks/{id}/watch][%d] watchTaskInternalServerError  %+v", 500, o.Payload)
+}
+
+func (o *WatchTaskInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+/*WatchTaskInternalServerErrorBody watch task internal server error body
+swagger:model WatchTaskInternalServerErrorBody
+*/
+type WatchTaskInternalServerErrorBody map[string]string
+
+// Validate validates this watch task internal server error body
+func (o WatchTaskInternalServerErrorBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if swag.IsZero(o) { // not required
+		return nil
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+/*WatchTaskNotFoundBody watch task not found body
+swagger:model WatchTaskNotFoundBody
+*/
+type WatchTaskNotFoundBody map[string]string
+
+// Validate validates this watch task not found body
+func (o WatchTaskNotFoundBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if swag.IsZero(o) { // not required
+		return nil
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }

@@ -9,8 +9,8 @@ import (
 	"github.com/go-openapi/errors"
 )
 
-// MetricInfo metric info
-// swagger:model metricInfo
+// MetricInfo MetricInfo defines metric version.
+// swagger:model MetricInfo
 type MetricInfo struct {
 
 	// version

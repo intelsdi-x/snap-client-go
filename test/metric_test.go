@@ -19,18 +19,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package integration
+package test
 
 import (
+	"os"
 	"testing"
 
-	"github.com/intelsdi-x/snap/client"
-	"github.com/intelsdi-x/snap/client/operations"
+	httptransport "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
+	"github.com/intelsdi-x/snap-client-go/client"
+	"github.com/intelsdi-x/snap-client-go/client/operations"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
+const (
+	snapScheme   = "http"
+	snapBasePath = "v2"
+)
+
 func TestGetMetrics(t *testing.T) {
-	op := client.Default.Operations
+	op := getOperationClient(getHost(), snapBasePath, snapScheme)
 
 	Convey("Testing GetMetrics", t, func() {
 		Convey("Test get a list of metrics", func() {
@@ -42,4 +50,19 @@ func TestGetMetrics(t *testing.T) {
 			So(len(resp.Payload.Metrics), ShouldBeGreaterThan, 0)
 		})
 	})
+}
+
+func getOperationClient(host, basePath, scheme string) *operations.Client {
+	transport := httptransport.New(host, basePath, []string{scheme})
+	tc := client.New(transport, strfmt.Default)
+
+	return tc.Operations
+}
+
+func getHost() string {
+	host := os.Getenv("SNAP_CLIENT_GO_HOST") + ":8181"
+	if host == ":8181" {
+		host = "127.0.0.1:8181"
+	}
+	return host
 }

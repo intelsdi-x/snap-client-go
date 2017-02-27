@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -29,6 +31,13 @@ func (o *RemoveTaskReader) ReadResponse(response runtime.ClientResponse, consume
 			return nil, err
 		}
 		return result, nil
+
+	case 404:
+		result := NewRemoveTaskNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 
 	case 500:
 		result := NewRemoveTaskInternalServerError()
@@ -71,6 +80,33 @@ func (o *RemoveTaskNoContent) readResponse(response runtime.ClientResponse, cons
 	return nil
 }
 
+// NewRemoveTaskNotFound creates a RemoveTaskNotFound with default headers values
+func NewRemoveTaskNotFound() *RemoveTaskNotFound {
+	return &RemoveTaskNotFound{}
+}
+
+/*RemoveTaskNotFound handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type RemoveTaskNotFound struct {
+	Payload RemoveTaskNotFoundBody
+}
+
+func (o *RemoveTaskNotFound) Error() string {
+	return fmt.Sprintf("[DELETE /tasks/{id}][%d] removeTaskNotFound  %+v", 404, o.Payload)
+}
+
+func (o *RemoveTaskNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewRemoveTaskInternalServerError creates a RemoveTaskInternalServerError with default headers values
 func NewRemoveTaskInternalServerError() *RemoveTaskInternalServerError {
 	return &RemoveTaskInternalServerError{}
@@ -89,5 +125,24 @@ func (o *RemoveTaskInternalServerError) Error() string {
 
 func (o *RemoveTaskInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	return nil
+}
+
+/*RemoveTaskNotFoundBody remove task not found body
+swagger:model RemoveTaskNotFoundBody
+*/
+type RemoveTaskNotFoundBody map[string]string
+
+// Validate validates this remove task not found body
+func (o RemoveTaskNotFoundBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if swag.IsZero(o) { // not required
+		return nil
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }

@@ -19,18 +19,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package integration
+package test
 
 import (
 	"testing"
 
-	"github.com/intelsdi-x/snap/client"
-	"github.com/intelsdi-x/snap/client/operations"
+	"github.com/intelsdi-x/snap-client-go/client/operations"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestAddTask(t *testing.T) {
-	op := client.Default.Operations
+	op := getOperationClient(getHost(), snapBasePath, snapScheme)
 
 	Convey("Testing AddTask", t, func() {
 		Convey("Test add a task", func() {
@@ -45,7 +44,8 @@ func TestAddTask(t *testing.T) {
 }
 
 func TestTask(t *testing.T) {
-	op := client.Default.Operations
+	op := getOperationClient(getHost(), snapBasePath, snapScheme)
+
 	var id string
 	Convey("Testing Tasks", t, func() {
 		Convey("Test get a list of tasks", func() {

@@ -19,19 +19,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package integration
+package test
 
 import (
-	"fmt"
 	"testing"
 
-	"github.com/intelsdi-x/snap/client"
-	"github.com/intelsdi-x/snap/client/operations"
+	"github.com/intelsdi-x/snap-client-go/client/operations"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestGetPluginConfigItems(t *testing.T) {
-	op := client.Default.Operations
+	op := getOperationClient(getHost(), snapBasePath, snapScheme)
 
 	Convey("Testing GetPluginConfigItems", t, func() {
 		Convey("Test get the config without parameters", func() {
@@ -49,14 +47,14 @@ func TestGetPluginConfigItems(t *testing.T) {
 			params.SetPversion(int64(2))
 
 			resp, err := op.GetPluginConfigItem(params)
+			So(resp, ShouldResemble, &operations.GetPluginConfigItemOK{})
 			So(err, ShouldBeNil)
-			So(resp.Payload, ShouldNotBeNil)
 		})
 	})
 }
 
 func TestUpdatePluginConfigItems(t *testing.T) {
-	op := client.Default.Operations
+	op := getOperationClient(getHost(), snapBasePath, snapScheme)
 
 	Convey("Testing UpdatePluginConfigItems", t, func() {
 		Convey("Test set the plugin config without parameters", func() {
@@ -88,23 +86,13 @@ func TestUpdatePluginConfigItems(t *testing.T) {
 
 			resp, err := op.SetPluginConfigItem(params)
 			So(err, ShouldBeNil)
-			So(resp, ShouldNotBeNil)
-
-			gparams := operations.NewGetPluginConfigItemParams()
-			gparams.SetPname("mock")
-			gparams.SetPtype("collector")
-			gparams.SetPversion(int64(1))
-
-			rep, err := op.GetPluginConfigItem(gparams)
-			So(err, ShouldBeNil)
-			So(rep.Payload, ShouldNotBeNil)
-			fmt.Println(rep.Payload)
+			So(resp, ShouldResemble, &operations.SetPluginConfigItemOK{})
 		})
 	})
 }
 
 func TestDeletePluginConfigItems(t *testing.T) {
-	op := client.Default.Operations
+	op := getOperationClient(getHost(), snapBasePath, snapScheme)
 
 	Convey("Testing DeletePluginConfigItems", t, func() {
 		Convey("Test delete the plugin config without parameters", func() {
@@ -122,19 +110,9 @@ func TestDeletePluginConfigItems(t *testing.T) {
 			params.SetPversion(int64(1))
 			params.SetConfig([]string{"somefloat"})
 
-			rep, err := op.DeletePluginConfigItem(params)
+			resp, err := op.DeletePluginConfigItem(params)
 			So(err, ShouldBeNil)
-			So(rep, ShouldNotBeNil)
-
-			gparams := operations.NewGetPluginConfigItemParams()
-			gparams.SetPname("mock")
-			gparams.SetPtype("collector")
-			gparams.SetPversion(int64(1))
-
-			r, err := op.GetPluginConfigItem(gparams)
-			So(err, ShouldBeNil)
-			So(r.Payload, ShouldNotBeNil)
-			fmt.Println(r.Payload)
+			So(resp, ShouldResemble, &operations.DeletePluginConfigItemOK{})
 		})
 	})
 }

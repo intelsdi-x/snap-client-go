@@ -1,8 +1,10 @@
+#!/bin/bash
 # File managed by pluginsync
+
 # http://www.apache.org/licenses/LICENSE-2.0.txt
 #
 #
-# Copyright 2015 Intel Corporation
+# Copyright 2017 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,29 +18,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-default:
-	$(MAKE) deps
-	$(MAKE) swagger-client
-	$(MAKE) all
-deps:
-	bash -c "./scripts/deps.sh"
-test:
-	bash -c "./scripts/test.sh $(TEST_TYPE)"
-test-legacy:
-	bash -c "./scripts/test.sh legacy"
-test-small:
-	bash -c "./scripts/test.sh small"
-test-medium:
-	bash -c "./scripts/test.sh medium"
-test-large:
-	bash -c "./scripts/test.sh large"
-test-all:
-	$(MAKE) test-small
-	$(MAKE) test-medium
-	$(MAKE) test-large
-check:
-	$(MAKE) test
-all:
-	bash -c "./scripts/build.sh"
-swagger-client:
-	bash -v "./scripts/swagger-gen.sh"
+set -e
+set -u
+set -o pipefail
+
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+rm -rf ${__dir}/../client
+rm -rf ${__dir}/../models
+
+swagger generate client -f ${__dir}/../swagger.json -A snap
+

@@ -42,11 +42,17 @@
           "http",
           "https"
         ],
-        "summary": "lists a list of metric types.",
+        "summary": "lists a list of loaded metric types. An empty list returns if there is no loaded metrics. Any bad request results in error.",
         "operationId": "getMetrics",
         "responses": {
           "200": {
             "$ref": "#/responses/MetricsResponse"
+          },
+          "404": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/responses/ErrorResponse"
           }
         }
       }
@@ -65,7 +71,7 @@
           "http",
           "https"
         ],
-        "summary": "lists a list of loaded plugins.",
+        "summary": "lists a list of loaded plugins. An empty list is returned if there is no loaded plugins.",
         "operationId": "getPlugins",
         "responses": {
           "200": {
@@ -76,12 +82,13 @@
       "post": {
         "consumes": [
           "application/json",
-          "application/x-protobuf"
+          "application/x-protobuf",
+          "multipart/form-data"
         ],
         "produces": [
           "application/json",
           "application/x-protobuf",
-          "application/octet-stream"
+          "multipart/form-data"
         ],
         "schemes": [
           "http",
@@ -131,7 +138,7 @@
           "http",
           "https"
         ],
-        "summary": "lists a given plugin by its type, name and version.",
+        "summary": "lists a given plugin by its type, name and version. No plugin found error returns if it's not existing.",
         "operationId": "getPlugin",
         "parameters": [
           {
@@ -165,6 +172,15 @@
         "responses": {
           "200": {
             "$ref": "#/responses/PluginResponse"
+          },
+          "400": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "404": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/responses/ErrorResponse"
           }
         }
       },
@@ -183,7 +199,7 @@
           "http",
           "https"
         ],
-        "summary": "unload a plugin by its type, name and version.",
+        "summary": "unloads a plugin by its type, name and version.Otherwise, an error is returned.",
         "operationId": "unloadPlugin",
         "parameters": [
           {
@@ -235,6 +251,7 @@
     },
     "/plugins/{ptype}/{pname}/{pversion}/config": {
       "get": {
+        "description": "Any other type results in error.",
         "consumes": [
           "application/json",
           "application/x-protobuf"
@@ -247,7 +264,7 @@
           "http",
           "https"
         ],
-        "summary": "lists the config of a giving plugin.",
+        "summary": "lists the config of a giving plugin. The allowed plugin types are collector, processor, and publisher.",
         "operationId": "getPluginConfigItem",
         "parameters": [
           {
@@ -281,6 +298,9 @@
         "responses": {
           "200": {
             "$ref": "#/responses/PluginConfigResponse"
+          },
+          "400": {
+            "$ref": "#/responses/ErrorResponse"
           }
         }
       },
@@ -297,7 +317,7 @@
           "http",
           "https"
         ],
-        "summary": "updates the config of a giving plugin.",
+        "summary": "updates the config of a giving plugin. A wrong plugin type or non-numeric plugin version results in error.",
         "operationId": "setPluginConfigItem",
         "parameters": [
           {
@@ -337,10 +357,14 @@
         "responses": {
           "200": {
             "$ref": "#/responses/PluginConfigResponse"
+          },
+          "400": {
+            "$ref": "#/responses/ErrorResponse"
           }
         }
       },
       "delete": {
+        "description": "At lease one config key is required for this operation. An error occurs for any bad request.",
         "consumes": [
           "application/json",
           "application/x-protobuf"
@@ -353,7 +377,7 @@
           "http",
           "https"
         ],
-        "summary": "deletes the config of a giving plugin.",
+        "summary": "deletes the config of a giving plugin. Note that that to be removed config items are a slice of config keys.",
         "operationId": "deletePluginConfigItem",
         "parameters": [
           {
@@ -397,6 +421,9 @@
         "responses": {
           "200": {
             "$ref": "#/responses/PluginConfigResponse"
+          },
+          "400": {
+            "$ref": "#/responses/ErrorResponse"
           }
         }
       }
@@ -415,7 +442,7 @@
           "http",
           "https"
         ],
-        "summary": "lists a list of created tasks.",
+        "summary": "lists a list of created tasks. An empty list returns if no created tasks.",
         "operationId": "getTasks",
         "responses": {
           "200": {
@@ -426,19 +453,17 @@
       "post": {
         "consumes": [
           "application/json",
-          "application/x-protobuf",
-          "application/x-www-form-urlencoded"
+          "application/x-protobuf"
         ],
         "produces": [
           "application/json",
-          "application/x-protobuf",
-          "application/x-www-form-urlencoded"
+          "application/x-protobuf"
         ],
         "schemes": [
           "http",
           "https"
         ],
-        "summary": "creates a task based on the input.",
+        "summary": "creates a task based on the input. Othereise, an error returns if the input misses the required fields or is in a malformed format.",
         "operationId": "addTask",
         "parameters": [
           {
@@ -474,7 +499,7 @@
           "http",
           "https"
         ],
-        "summary": "lists a task by the giving task id.",
+        "summary": "lists a task by the giving task id. Otherwise a not found error returns.",
         "operationId": "getTask",
         "parameters": [
           {
@@ -488,25 +513,26 @@
         "responses": {
           "200": {
             "$ref": "#/responses/TaskResponse"
+          },
+          "404": {
+            "$ref": "#/responses/ErrorResponse"
           }
         }
       },
       "put": {
         "consumes": [
           "application/json",
-          "application/x-protobuf",
-          "application/x-www-form-urlencoded"
+          "application/x-protobuf"
         ],
         "produces": [
           "application/json",
-          "application/x-protobuf",
-          "application/x-www-form-urlencoded"
+          "application/x-protobuf"
         ],
         "schemes": [
           "http",
           "https"
         ],
-        "summary": "updates a task for the giving task id.",
+        "summary": "updates a task's state for the giving task id and the input state. An error occurs for any bad request.",
         "operationId": "updateTaskState",
         "parameters": [
           {
@@ -553,7 +579,7 @@
           "http",
           "https"
         ],
-        "summary": "deletes a task for the giving task id.",
+        "summary": "deletes a task for the giving task id. Note that only a stopped task may be removed. Otherwise, an error occurs.",
         "operationId": "removeTask",
         "parameters": [
           {
@@ -567,6 +593,9 @@
         "responses": {
           "204": {
             "$ref": "#/responses/TaskResponse"
+          },
+          "404": {
+            "$ref": "#/responses/ErrorResponse"
           },
           "500": {
             "$ref": "#/responses/TaskErrorResponse"
@@ -590,7 +619,7 @@
           "http",
           "https"
         ],
-        "summary": "watches a task data stream for the giving task id.",
+        "summary": "watches a task data stream for the giving task id. Otherwise, an error returns.",
         "operationId": "watchTask",
         "parameters": [
           {
@@ -604,6 +633,12 @@
         "responses": {
           "200": {
             "$ref": "#/responses/TaskResponse"
+          },
+          "404": {
+            "$ref": "#/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/responses/ErrorResponse"
           }
         }
       }
@@ -632,7 +667,7 @@
         "metrics": {
           "type": "object",
           "additionalProperties": {
-            "$ref": "#/definitions/metricInfo"
+            "$ref": "#/definitions/MetricInfo"
           },
           "x-go-name": "Metrics"
         },
@@ -662,11 +697,6 @@
         }
       },
       "x-go-package": "github.com/intelsdi-x/snap/scheduler/wmap"
-    },
-    "ConfigDataNode": {
-      "description": "Represents a set of configuration data",
-      "type": "object",
-      "x-go-package": "github.com/intelsdi-x/snap/core/cdata"
     },
     "DynamicElement": {
       "type": "object",
@@ -744,6 +774,18 @@
         }
       },
       "x-go-package": "github.com/intelsdi-x/snap/mgmt/rest/v2"
+    },
+    "MetricInfo": {
+      "type": "object",
+      "title": "MetricInfo defines metric version.",
+      "properties": {
+        "version": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Version_"
+        }
+      },
+      "x-go-package": "github.com/intelsdi-x/snap/scheduler/wmap"
     },
     "Plugin": {
       "type": "object",
@@ -1027,17 +1069,6 @@
         }
       },
       "x-go-package": "github.com/intelsdi-x/snap/scheduler/wmap"
-    },
-    "metricInfo": {
-      "type": "object",
-      "properties": {
-        "version": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "Version_"
-        }
-      },
-      "x-go-package": "github.com/intelsdi-x/snap/scheduler/wmap"
     }
   },
   "responses": {
@@ -1066,10 +1097,7 @@
       }
     },
     "PluginConfigResponse": {
-      "description": "PluginConfigItem represents cdata.ConfigDataNode which implements it's own UnmarshalJSON.",
-      "schema": {
-        "$ref": "#/definitions/ConfigDataNode"
-      }
+      "description": "PluginConfigItem represents cdata.ConfigDataNode which implements it's own UnmarshalJSON."
     },
     "PluginResponse": {
       "description": "PluginResponse represents the response from plugin operations.",

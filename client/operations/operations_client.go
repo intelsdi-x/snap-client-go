@@ -23,7 +23,7 @@ type Client struct {
 }
 
 /*
-AddTask creates a task based on the input
+AddTask creates a task based on the input othereise an error returns if the input misses the required fields or is in a malformed format
 */
 func (a *Client) AddTask(params *AddTaskParams) (*AddTaskCreated, error) {
 	// TODO: Validate the params before sending
@@ -35,8 +35,8 @@ func (a *Client) AddTask(params *AddTaskParams) (*AddTaskCreated, error) {
 		ID:                 "addTask",
 		Method:             "POST",
 		PathPattern:        "/tasks",
-		ProducesMediaTypes: []string{"application/json", "application/x-protobuf", "application/x-www-form-urlencoded"},
-		ConsumesMediaTypes: []string{"application/json", "application/x-protobuf", "application/x-www-form-urlencoded"},
+		ProducesMediaTypes: []string{"application/json", "application/x-protobuf"},
+		ConsumesMediaTypes: []string{"application/json", "application/x-protobuf"},
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &AddTaskReader{formats: a.formats},
@@ -51,7 +51,9 @@ func (a *Client) AddTask(params *AddTaskParams) (*AddTaskCreated, error) {
 }
 
 /*
-DeletePluginConfigItem deletes the config of a giving plugin
+DeletePluginConfigItem deletes the config of a giving plugin note that that to be removed config items are a slice of config keys
+
+At lease one config key is required for this operation. An error occurs for any bad request.
 */
 func (a *Client) DeletePluginConfigItem(params *DeletePluginConfigItemParams) (*DeletePluginConfigItemOK, error) {
 	// TODO: Validate the params before sending
@@ -79,7 +81,7 @@ func (a *Client) DeletePluginConfigItem(params *DeletePluginConfigItemParams) (*
 }
 
 /*
-GetMetrics lists a list of metric types
+GetMetrics lists a list of loaded metric types an empty list returns if there is no loaded metrics any bad request results in error
 */
 func (a *Client) GetMetrics(params *GetMetricsParams) (*GetMetricsOK, error) {
 	// TODO: Validate the params before sending
@@ -107,7 +109,7 @@ func (a *Client) GetMetrics(params *GetMetricsParams) (*GetMetricsOK, error) {
 }
 
 /*
-GetPlugin lists a given plugin by its type name and version
+GetPlugin lists a given plugin by its type name and version no plugin found error returns if it s not existing
 */
 func (a *Client) GetPlugin(params *GetPluginParams) (*GetPluginOK, error) {
 	// TODO: Validate the params before sending
@@ -135,7 +137,9 @@ func (a *Client) GetPlugin(params *GetPluginParams) (*GetPluginOK, error) {
 }
 
 /*
-GetPluginConfigItem lists the config of a giving plugin
+GetPluginConfigItem lists the config of a giving plugin the allowed plugin types are collector processor and publisher
+
+Any other type results in error.
 */
 func (a *Client) GetPluginConfigItem(params *GetPluginConfigItemParams) (*GetPluginConfigItemOK, error) {
 	// TODO: Validate the params before sending
@@ -163,7 +167,7 @@ func (a *Client) GetPluginConfigItem(params *GetPluginConfigItemParams) (*GetPlu
 }
 
 /*
-GetPlugins lists a list of loaded plugins
+GetPlugins lists a list of loaded plugins an empty list is returned if there is no loaded plugins
 */
 func (a *Client) GetPlugins(params *GetPluginsParams) (*GetPluginsOK, error) {
 	// TODO: Validate the params before sending
@@ -191,7 +195,7 @@ func (a *Client) GetPlugins(params *GetPluginsParams) (*GetPluginsOK, error) {
 }
 
 /*
-GetTask lists a task by the giving task id
+GetTask lists a task by the giving task id otherwise a not found error returns
 */
 func (a *Client) GetTask(params *GetTaskParams) (*GetTaskOK, error) {
 	// TODO: Validate the params before sending
@@ -219,7 +223,7 @@ func (a *Client) GetTask(params *GetTaskParams) (*GetTaskOK, error) {
 }
 
 /*
-GetTasks lists a list of created tasks
+GetTasks lists a list of created tasks an empty list returns if no created tasks
 */
 func (a *Client) GetTasks(params *GetTasksParams) (*GetTasksOK, error) {
 	// TODO: Validate the params before sending
@@ -259,8 +263,8 @@ func (a *Client) LoadPlugin(params *LoadPluginParams) (*LoadPluginOK, *LoadPlugi
 		ID:                 "loadPlugin",
 		Method:             "POST",
 		PathPattern:        "/plugins",
-		ProducesMediaTypes: []string{"application/json", "application/octet-stream", "application/x-protobuf"},
-		ConsumesMediaTypes: []string{"application/json", "application/x-protobuf"},
+		ProducesMediaTypes: []string{"application/json", "application/x-protobuf", "multipart/form-data"},
+		ConsumesMediaTypes: []string{"application/json", "application/x-protobuf", "multipart/form-data"},
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &LoadPluginReader{formats: a.formats},
@@ -281,7 +285,7 @@ func (a *Client) LoadPlugin(params *LoadPluginParams) (*LoadPluginOK, *LoadPlugi
 }
 
 /*
-RemoveTask deletes a task for the giving task id
+RemoveTask deletes a task for the giving task id note that only a stopped task may be removed otherwise an error occurs
 */
 func (a *Client) RemoveTask(params *RemoveTaskParams) (*RemoveTaskNoContent, error) {
 	// TODO: Validate the params before sending
@@ -309,7 +313,7 @@ func (a *Client) RemoveTask(params *RemoveTaskParams) (*RemoveTaskNoContent, err
 }
 
 /*
-SetPluginConfigItem updates the config of a giving plugin
+SetPluginConfigItem updates the config of a giving plugin a wrong plugin type or non numeric plugin version results in error
 */
 func (a *Client) SetPluginConfigItem(params *SetPluginConfigItemParams) (*SetPluginConfigItemOK, error) {
 	// TODO: Validate the params before sending
@@ -337,7 +341,7 @@ func (a *Client) SetPluginConfigItem(params *SetPluginConfigItemParams) (*SetPlu
 }
 
 /*
-UnloadPlugin unloads a plugin by its type name and version
+UnloadPlugin unloads a plugin by its type name and version otherwise an error is returned
 */
 func (a *Client) UnloadPlugin(params *UnloadPluginParams) (*UnloadPluginOK, *UnloadPluginNoContent, error) {
 	// TODO: Validate the params before sending
@@ -371,7 +375,7 @@ func (a *Client) UnloadPlugin(params *UnloadPluginParams) (*UnloadPluginOK, *Unl
 }
 
 /*
-UpdateTaskState updates a task for the giving task id
+UpdateTaskState updates a task s state for the giving task id and the input state an error occurs for any bad request
 */
 func (a *Client) UpdateTaskState(params *UpdateTaskStateParams) (*UpdateTaskStateNoContent, error) {
 	// TODO: Validate the params before sending
@@ -383,8 +387,8 @@ func (a *Client) UpdateTaskState(params *UpdateTaskStateParams) (*UpdateTaskStat
 		ID:                 "updateTaskState",
 		Method:             "PUT",
 		PathPattern:        "/tasks/{id}",
-		ProducesMediaTypes: []string{"application/json", "application/x-protobuf", "application/x-www-form-urlencoded"},
-		ConsumesMediaTypes: []string{"application/json", "application/x-protobuf", "application/x-www-form-urlencoded"},
+		ProducesMediaTypes: []string{"application/json", "application/x-protobuf"},
+		ConsumesMediaTypes: []string{"application/json", "application/x-protobuf"},
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &UpdateTaskStateReader{formats: a.formats},
@@ -399,7 +403,7 @@ func (a *Client) UpdateTaskState(params *UpdateTaskStateParams) (*UpdateTaskStat
 }
 
 /*
-WatchTask watches a task data stream for the giving task id
+WatchTask watches a task data stream for the giving task id otherwise an error returns
 */
 func (a *Client) WatchTask(params *WatchTaskParams) (*WatchTaskOK, error) {
 	// TODO: Validate the params before sending
