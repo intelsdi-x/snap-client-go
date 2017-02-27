@@ -1,0 +1,27 @@
+sudo: true
+language: go
+go:
+- 1.7.3
+before_install:
+- go get github.com/Masterminds/glide
+- go get github.com/smartystreets/goconvey/convey
+- if [ ! -d $SNAP_CLIENT_GO_SOURCE ]; then mkdir -p $HOME/gopath/src/github.com/intelsdi-x; ln -s $TRAVIS_BUILD_DIR $SNAP_CLIENT_GO_SOURCE; fi # CI for forks not from intelsdi-x
+env:
+  global:
+  - SNAP_CLIENT_GO_SOURCE=/home/travis/gopath/src/github.com/intelsdi-x/snap-client-go
+  - GLIDE_HOME="${HOME}/.glide"
+  matrix:
+  - SNAP_TEST_TYPE=small
+  - SNAP_TEST_TYPE=medium
+  - SNAP_TEST_TYPE=build
+install:
+- export TMPDIR=$HOME/tmp
+- mkdir -p $TMPDIR
+- cd $SNAP_CLIENT_GO_SOURCE # change dir into source
+- make
+script:
+- make test 2>&1 # Run test suite
+notifications:
+  email: false
+  slack:
+    secure: VkbZLIc2RH8yf3PtIAxUNPdAu3rQQ7yQx0GcK124JhbEnZGaHyK615V0rbG7HcVmYKGPdB0cXqZiLBDKGqGKb2zR1NepOe1nF03jxGSpPq8jIFeEXSJGEYGL34ScDzZZGuG6qwbjFcXiW5lqn6t8igzp7v2+URYBaZo5ktCS2xY=
