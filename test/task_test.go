@@ -22,6 +22,8 @@ limitations under the License.
 package test
 
 import (
+	"fmt"
+	"net/http"
 	"testing"
 
 	"github.com/intelsdi-x/snap-client-go/client/operations"
@@ -74,6 +76,12 @@ func TestTask(t *testing.T) {
 			params.SetAction("start")
 
 			resp, err := op.UpdateTaskState(params)
+			So(err, ShouldBeNil)
+			So(resp, ShouldNotBeNil)
+		})
+
+		Convey("Test watch a task", func() {
+			resp, err := http.Get(fmt.Sprintf("http://%s/%s/tasks/:%s/watch", getHost(), snapBasePath, id))
 			So(err, ShouldBeNil)
 			So(resp, ShouldNotBeNil)
 		})
