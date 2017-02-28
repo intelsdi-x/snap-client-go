@@ -7,33 +7,36 @@ This repo has [Snap](https://github.com/intelsdi-x/snap) restful Go clients gene
 
 You can browse and test Snap APIs interactively by leveraging tools like [swagger-ui](https://github.com/swagger-api/swagger-ui) or [apistudio.io](http://apistudio.io/).
 
-If any change for swagger.json specification, running the command 'make' to generate a new client.
+If any change for swagger.json specification, running the command `make` to generate a new client.
+
+## Creating clients
+
+The default client is `Default` if running client locally. Generated client is in the package of client and models. Please refer to package test for examples.
+
+### Default client
+
+```sh
+  opc := Default.operations
+```
+
+### Custom client
+
+```sh
+  import httptransport "github.com/go-openapi/runtime/client"
+  import "github.com/go-openapi/strfmt"
+
+  transport := httptransport.New(host, basePath, scheme)
+  tc := client.New(transport, strfmt.Default)
+  opc := client.opertions
+```
 
 ## Running tests
 
-The package `test` contains integration tests that verify the generated client library if it is working appropriately against the actual behavior of the Snap APIs. Tests will fail if any incompatible change in the API.  Package `test` verifies the following APIs:
+The package `test` contains integration tests that verify the generated client library if it is working appropriately against the actual behavior of the Snap APIs. Tests will fail if any incompatible change in the API.
 
-* Metric
- * Get the available metric list
-* Plugin & Config
- * Load a plugin
- * Unload a plugin
- * Get a giving plugin details
- * Get the loaded plugin list
- * Get a giving plugin Config
- * Set a giving plugin Config
- * Delete a giving plugin config
-* Task
- * Create a task
- * Get a list of tasks
- * Get a giving task details
- * Update a task state
- * Watch a task
- * Delete a task
+For your convenience, the Docker and docker-compose based medium test is available for you to try out.  At the root package, you can run:  
 
-For your convenience, the Docker and docker-compose based medium test is available for you to try out.  You can run:  
-
-```
+```sh
 make test-medium
 ```
 
@@ -43,7 +46,7 @@ The Snap team takes security very seriously. If you have any issue regarding sec
 and not by creating a GitHub issue. We will follow up with you promptly with more information and a plan for remediation.
 
 ## License
-Snap Clint Go is Open Source software released under the [Apache 2.0 License](LICENSE).
+Snap Client Go is Open Source software released under the [Apache 2.0 License](LICENSE).
 
 ## Thank You
 And **thank you!** Your contribution, through code and participation, is incredibly important to us.
