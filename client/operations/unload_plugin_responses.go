@@ -6,12 +6,8 @@ package operations
 import (
 	"fmt"
 	"io"
-	"strconv"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -27,19 +23,19 @@ type UnloadPluginReader struct {
 func (o *UnloadPluginReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
 
-	case 200:
-		result := NewUnloadPluginOK()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return result, nil
-
 	case 204:
 		result := NewUnloadPluginNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
+
+	case 400:
+		result := NewUnloadPluginBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 
 	case 404:
 		result := NewUnloadPluginNotFound()
@@ -65,33 +61,6 @@ func (o *UnloadPluginReader) ReadResponse(response runtime.ClientResponse, consu
 	default:
 		return nil, runtime.NewAPIError("unknown error", response, response.Code())
 	}
-}
-
-// NewUnloadPluginOK creates a UnloadPluginOK with default headers values
-func NewUnloadPluginOK() *UnloadPluginOK {
-	return &UnloadPluginOK{}
-}
-
-/*UnloadPluginOK handles this case with default header values.
-
-PluginsResp represents the response from plugin operations.
-*/
-type UnloadPluginOK struct {
-	Payload UnloadPluginOKBody
-}
-
-func (o *UnloadPluginOK) Error() string {
-	return fmt.Sprintf("[DELETE /plugins/{ptype}/{pname}/{pversion}][%d] unloadPluginOK  %+v", 200, o.Payload)
-}
-
-func (o *UnloadPluginOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
 }
 
 // NewUnloadPluginNoContent creates a UnloadPluginNoContent with default headers values
@@ -123,6 +92,35 @@ func (o *UnloadPluginNoContent) readResponse(response runtime.ClientResponse, co
 	return nil
 }
 
+// NewUnloadPluginBadRequest creates a UnloadPluginBadRequest with default headers values
+func NewUnloadPluginBadRequest() *UnloadPluginBadRequest {
+	return &UnloadPluginBadRequest{}
+}
+
+/*UnloadPluginBadRequest handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type UnloadPluginBadRequest struct {
+	Payload *models.Error
+}
+
+func (o *UnloadPluginBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /plugins/{ptype}/{pname}/{pversion}][%d] unloadPluginBadRequest  %+v", 400, o.Payload)
+}
+
+func (o *UnloadPluginBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewUnloadPluginNotFound creates a UnloadPluginNotFound with default headers values
 func NewUnloadPluginNotFound() *UnloadPluginNotFound {
 	return &UnloadPluginNotFound{}
@@ -133,7 +131,7 @@ func NewUnloadPluginNotFound() *UnloadPluginNotFound {
 Error unsuccessful generic response to a failed API call
 */
 type UnloadPluginNotFound struct {
-	Payload UnloadPluginNotFoundBody
+	Payload *models.Error
 }
 
 func (o *UnloadPluginNotFound) Error() string {
@@ -142,8 +140,10 @@ func (o *UnloadPluginNotFound) Error() string {
 
 func (o *UnloadPluginNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -160,7 +160,7 @@ func NewUnloadPluginConflict() *UnloadPluginConflict {
 Error unsuccessful generic response to a failed API call
 */
 type UnloadPluginConflict struct {
-	Payload UnloadPluginConflictBody
+	Payload *models.Error
 }
 
 func (o *UnloadPluginConflict) Error() string {
@@ -169,8 +169,10 @@ func (o *UnloadPluginConflict) Error() string {
 
 func (o *UnloadPluginConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -187,7 +189,7 @@ func NewUnloadPluginInternalServerError() *UnloadPluginInternalServerError {
 Error unsuccessful generic response to a failed API call
 */
 type UnloadPluginInternalServerError struct {
-	Payload UnloadPluginInternalServerErrorBody
+	Payload *models.Error
 }
 
 func (o *UnloadPluginInternalServerError) Error() string {
@@ -196,118 +198,11 @@ func (o *UnloadPluginInternalServerError) Error() string {
 
 func (o *UnloadPluginInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
-	}
-
-	return nil
-}
-
-/*UnloadPluginConflictBody unload plugin conflict body
-swagger:model UnloadPluginConflictBody
-*/
-type UnloadPluginConflictBody map[string]string
-
-// Validate validates this unload plugin conflict body
-func (o UnloadPluginConflictBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-/*UnloadPluginInternalServerErrorBody unload plugin internal server error body
-swagger:model UnloadPluginInternalServerErrorBody
-*/
-type UnloadPluginInternalServerErrorBody map[string]string
-
-// Validate validates this unload plugin internal server error body
-func (o UnloadPluginInternalServerErrorBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-/*UnloadPluginNotFoundBody unload plugin not found body
-swagger:model UnloadPluginNotFoundBody
-*/
-type UnloadPluginNotFoundBody map[string]string
-
-// Validate validates this unload plugin not found body
-func (o UnloadPluginNotFoundBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-/*UnloadPluginOKBody unload plugin o k body
-swagger:model UnloadPluginOKBody
-*/
-type UnloadPluginOKBody struct {
-
-	// plugins
-	// Required: true
-	Plugins []*models.Plugin `json:"Plugins"`
-}
-
-// Validate validates this unload plugin o k body
-func (o *UnloadPluginOKBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validatePlugins(formats); err != nil {
-		// prop
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *UnloadPluginOKBody) validatePlugins(formats strfmt.Registry) error {
-
-	if err := validate.Required("unloadPluginOK"+"."+"plugins", "body", o.Plugins); err != nil {
-		return err
-	}
-
-	for i := 0; i < len(o.Plugins); i++ {
-
-		if swag.IsZero(o.Plugins[i]) { // not required
-			continue
-		}
-
-		if o.Plugins[i] != nil {
-
-			if err := o.Plugins[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("unloadPluginOK" + "." + "plugins" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
 	}
 
 	return nil

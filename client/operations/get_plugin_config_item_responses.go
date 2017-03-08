@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
+
+	"github.com/intelsdi-x/snap-client-go/models"
 )
 
 // GetPluginConfigItemReader is a Reader for the GetPluginConfigItem structure.
@@ -52,13 +52,19 @@ func NewGetPluginConfigItemOK() *GetPluginConfigItemOK {
 PluginConfigItem represents cdata.ConfigDataNode which implements it's own UnmarshalJSON.
 */
 type GetPluginConfigItemOK struct {
+	Payload models.ConfigDataNode
 }
 
 func (o *GetPluginConfigItemOK) Error() string {
-	return fmt.Sprintf("[GET /plugins/{ptype}/{pname}/{pversion}/config][%d] getPluginConfigItemOK ", 200)
+	return fmt.Sprintf("[GET /plugins/{ptype}/{pname}/{pversion}/config][%d] getPluginConfigItemOK  %+v", 200, o.Payload)
 }
 
 func (o *GetPluginConfigItemOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
 
 	return nil
 }
@@ -73,7 +79,7 @@ func NewGetPluginConfigItemBadRequest() *GetPluginConfigItemBadRequest {
 Error unsuccessful generic response to a failed API call
 */
 type GetPluginConfigItemBadRequest struct {
-	Payload GetPluginConfigItemBadRequestBody
+	Payload *models.Error
 }
 
 func (o *GetPluginConfigItemBadRequest) Error() string {
@@ -82,29 +88,12 @@ func (o *GetPluginConfigItemBadRequest) Error() string {
 
 func (o *GetPluginConfigItemBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
-	return nil
-}
-
-/*GetPluginConfigItemBadRequestBody get plugin config item bad request body
-swagger:model GetPluginConfigItemBadRequestBody
-*/
-type GetPluginConfigItemBadRequestBody map[string]string
-
-// Validate validates this get plugin config item bad request body
-func (o GetPluginConfigItemBadRequestBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }

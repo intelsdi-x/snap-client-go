@@ -35,7 +35,6 @@ test-large:
 test-all:
 	$(MAKE) test-small
 	$(MAKE) test-medium
-	$(MAKE) test-large
 check:
 	$(MAKE) test
 all:

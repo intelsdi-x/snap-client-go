@@ -7,9 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -97,7 +95,7 @@ func NewUpdateTaskStateBadRequest() *UpdateTaskStateBadRequest {
 Error unsuccessful generic response to a failed API call
 */
 type UpdateTaskStateBadRequest struct {
-	Payload UpdateTaskStateBadRequestBody
+	Payload *models.Error
 }
 
 func (o *UpdateTaskStateBadRequest) Error() string {
@@ -106,8 +104,10 @@ func (o *UpdateTaskStateBadRequest) Error() string {
 
 func (o *UpdateTaskStateBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -124,7 +124,7 @@ func NewUpdateTaskStateConflict() *UpdateTaskStateConflict {
 Error unsuccessful generic response to a failed API call
 */
 type UpdateTaskStateConflict struct {
-	Payload UpdateTaskStateConflictBody
+	Payload *models.Error
 }
 
 func (o *UpdateTaskStateConflict) Error() string {
@@ -133,8 +133,10 @@ func (o *UpdateTaskStateConflict) Error() string {
 
 func (o *UpdateTaskStateConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -151,7 +153,7 @@ func NewUpdateTaskStateInternalServerError() *UpdateTaskStateInternalServerError
 Error unsuccessful generic response to a failed API call
 */
 type UpdateTaskStateInternalServerError struct {
-	Payload UpdateTaskStateInternalServerErrorBody
+	Payload *models.Error
 }
 
 func (o *UpdateTaskStateInternalServerError) Error() string {
@@ -160,67 +162,12 @@ func (o *UpdateTaskStateInternalServerError) Error() string {
 
 func (o *UpdateTaskStateInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
-	return nil
-}
-
-/*UpdateTaskStateBadRequestBody update task state bad request body
-swagger:model UpdateTaskStateBadRequestBody
-*/
-type UpdateTaskStateBadRequestBody map[string]string
-
-// Validate validates this update task state bad request body
-func (o UpdateTaskStateBadRequestBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-/*UpdateTaskStateConflictBody update task state conflict body
-swagger:model UpdateTaskStateConflictBody
-*/
-type UpdateTaskStateConflictBody map[string]string
-
-// Validate validates this update task state conflict body
-func (o UpdateTaskStateConflictBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-/*UpdateTaskStateInternalServerErrorBody update task state internal server error body
-swagger:model UpdateTaskStateInternalServerErrorBody
-*/
-type UpdateTaskStateInternalServerErrorBody map[string]string
-
-// Validate validates this update task state internal server error body
-func (o UpdateTaskStateInternalServerErrorBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }

@@ -75,10 +75,9 @@ func TestUnloadPlugin(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			resp, ct, err := op.UnloadPlugin(params)
+			resp, err := op.UnloadPlugin(params)
 			So(err, ShouldBeNil)
-			So(resp, ShouldBeNil)
-			So(ct, ShouldNotBeNil)
+			So(resp, ShouldNotBeNil)
 		})
 
 		Convey("Test unload a non-existing plugin", func() {
@@ -87,9 +86,8 @@ func TestUnloadPlugin(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			ok, resp, err := op.UnloadPlugin(params)
+			resp, err := op.UnloadPlugin(params)
 			So(err, ShouldNotBeNil)
-			So(ok, ShouldBeNil)
 			So(resp, ShouldBeNil)
 		})
 	})
@@ -108,9 +106,8 @@ func TestLoadPlugin(t *testing.T) {
 			defer f.Close()
 
 			params.SetPluginData(f)
-			ok, resp, err := op.LoadPlugin(params)
+			resp, err := op.LoadPlugin(params)
 			So(err, ShouldBeNil)
-			So(ok, ShouldBeNil)
 			So(resp.Payload.Name, ShouldEqual, "mock")
 			So(resp.Payload.Version, ShouldEqual, 1)
 		})

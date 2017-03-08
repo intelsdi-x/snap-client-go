@@ -6,12 +6,8 @@ package operations
 import (
 	"fmt"
 	"io"
-	"strconv"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -26,13 +22,6 @@ type LoadPluginReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *LoadPluginReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
-	case 200:
-		result := NewLoadPluginOK()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return result, nil
 
 	case 201:
 		result := NewLoadPluginCreated()
@@ -55,6 +44,13 @@ func (o *LoadPluginReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return nil, result
 
+	case 415:
+		result := NewLoadPluginUnsupportedMediaType()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	case 500:
 		result := NewLoadPluginInternalServerError()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -65,33 +61,6 @@ func (o *LoadPluginReader) ReadResponse(response runtime.ClientResponse, consume
 	default:
 		return nil, runtime.NewAPIError("unknown error", response, response.Code())
 	}
-}
-
-// NewLoadPluginOK creates a LoadPluginOK with default headers values
-func NewLoadPluginOK() *LoadPluginOK {
-	return &LoadPluginOK{}
-}
-
-/*LoadPluginOK handles this case with default header values.
-
-PluginsResp represents the response from plugin operations.
-*/
-type LoadPluginOK struct {
-	Payload LoadPluginOKBody
-}
-
-func (o *LoadPluginOK) Error() string {
-	return fmt.Sprintf("[POST /plugins][%d] loadPluginOK  %+v", 200, o.Payload)
-}
-
-func (o *LoadPluginOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
 }
 
 // NewLoadPluginCreated creates a LoadPluginCreated with default headers values
@@ -133,7 +102,7 @@ func NewLoadPluginBadRequest() *LoadPluginBadRequest {
 Error unsuccessful generic response to a failed API call
 */
 type LoadPluginBadRequest struct {
-	Payload LoadPluginBadRequestBody
+	Payload *models.Error
 }
 
 func (o *LoadPluginBadRequest) Error() string {
@@ -142,8 +111,10 @@ func (o *LoadPluginBadRequest) Error() string {
 
 func (o *LoadPluginBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -160,7 +131,7 @@ func NewLoadPluginConflict() *LoadPluginConflict {
 Error unsuccessful generic response to a failed API call
 */
 type LoadPluginConflict struct {
-	Payload LoadPluginConflictBody
+	Payload *models.Error
 }
 
 func (o *LoadPluginConflict) Error() string {
@@ -169,8 +140,39 @@ func (o *LoadPluginConflict) Error() string {
 
 func (o *LoadPluginConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewLoadPluginUnsupportedMediaType creates a LoadPluginUnsupportedMediaType with default headers values
+func NewLoadPluginUnsupportedMediaType() *LoadPluginUnsupportedMediaType {
+	return &LoadPluginUnsupportedMediaType{}
+}
+
+/*LoadPluginUnsupportedMediaType handles this case with default header values.
+
+Error unsuccessful generic response to a failed API call
+*/
+type LoadPluginUnsupportedMediaType struct {
+	Payload *models.Error
+}
+
+func (o *LoadPluginUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[POST /plugins][%d] loadPluginUnsupportedMediaType  %+v", 415, o.Payload)
+}
+
+func (o *LoadPluginUnsupportedMediaType) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -187,7 +189,7 @@ func NewLoadPluginInternalServerError() *LoadPluginInternalServerError {
 Error unsuccessful generic response to a failed API call
 */
 type LoadPluginInternalServerError struct {
-	Payload LoadPluginInternalServerErrorBody
+	Payload *models.Error
 }
 
 func (o *LoadPluginInternalServerError) Error() string {
@@ -196,118 +198,11 @@ func (o *LoadPluginInternalServerError) Error() string {
 
 func (o *LoadPluginInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
-	}
-
-	return nil
-}
-
-/*LoadPluginBadRequestBody load plugin bad request body
-swagger:model LoadPluginBadRequestBody
-*/
-type LoadPluginBadRequestBody map[string]string
-
-// Validate validates this load plugin bad request body
-func (o LoadPluginBadRequestBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-/*LoadPluginConflictBody load plugin conflict body
-swagger:model LoadPluginConflictBody
-*/
-type LoadPluginConflictBody map[string]string
-
-// Validate validates this load plugin conflict body
-func (o LoadPluginConflictBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-/*LoadPluginInternalServerErrorBody load plugin internal server error body
-swagger:model LoadPluginInternalServerErrorBody
-*/
-type LoadPluginInternalServerErrorBody map[string]string
-
-// Validate validates this load plugin internal server error body
-func (o LoadPluginInternalServerErrorBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-/*LoadPluginOKBody load plugin o k body
-swagger:model LoadPluginOKBody
-*/
-type LoadPluginOKBody struct {
-
-	// plugins
-	// Required: true
-	Plugins []*models.Plugin `json:"Plugins"`
-}
-
-// Validate validates this load plugin o k body
-func (o *LoadPluginOKBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validatePlugins(formats); err != nil {
-		// prop
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *LoadPluginOKBody) validatePlugins(formats strfmt.Registry) error {
-
-	if err := validate.Required("loadPluginOK"+"."+"plugins", "body", o.Plugins); err != nil {
-		return err
-	}
-
-	for i := 0; i < len(o.Plugins); i++ {
-
-		if swag.IsZero(o.Plugins[i]) { // not required
-			continue
-		}
-
-		if o.Plugins[i] != nil {
-
-			if err := o.Plugins[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("loadPluginOK" + "." + "plugins" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
 	}
 
 	return nil

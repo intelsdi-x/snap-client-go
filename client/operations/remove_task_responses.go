@@ -7,9 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -90,7 +88,7 @@ func NewRemoveTaskNotFound() *RemoveTaskNotFound {
 Error unsuccessful generic response to a failed API call
 */
 type RemoveTaskNotFound struct {
-	Payload RemoveTaskNotFoundBody
+	Payload *models.Error
 }
 
 func (o *RemoveTaskNotFound) Error() string {
@@ -99,8 +97,10 @@ func (o *RemoveTaskNotFound) Error() string {
 
 func (o *RemoveTaskNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -125,24 +125,5 @@ func (o *RemoveTaskInternalServerError) Error() string {
 
 func (o *RemoveTaskInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	return nil
-}
-
-/*RemoveTaskNotFoundBody remove task not found body
-swagger:model RemoveTaskNotFoundBody
-*/
-type RemoveTaskNotFoundBody map[string]string
-
-// Validate validates this remove task not found body
-func (o RemoveTaskNotFoundBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }

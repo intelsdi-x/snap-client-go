@@ -90,7 +90,7 @@ func NewGetMetricsNotFound() *GetMetricsNotFound {
 Error unsuccessful generic response to a failed API call
 */
 type GetMetricsNotFound struct {
-	Payload GetMetricsNotFoundBody
+	Payload *models.Error
 }
 
 func (o *GetMetricsNotFound) Error() string {
@@ -99,8 +99,10 @@ func (o *GetMetricsNotFound) Error() string {
 
 func (o *GetMetricsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -117,7 +119,7 @@ func NewGetMetricsInternalServerError() *GetMetricsInternalServerError {
 Error unsuccessful generic response to a failed API call
 */
 type GetMetricsInternalServerError struct {
-	Payload GetMetricsInternalServerErrorBody
+	Payload *models.Error
 }
 
 func (o *GetMetricsInternalServerError) Error() string {
@@ -126,49 +128,13 @@ func (o *GetMetricsInternalServerError) Error() string {
 
 func (o *GetMetricsInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
-	return nil
-}
-
-/*GetMetricsInternalServerErrorBody get metrics internal server error body
-swagger:model GetMetricsInternalServerErrorBody
-*/
-type GetMetricsInternalServerErrorBody map[string]string
-
-// Validate validates this get metrics internal server error body
-func (o GetMetricsInternalServerErrorBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-/*GetMetricsNotFoundBody get metrics not found body
-swagger:model GetMetricsNotFoundBody
-*/
-type GetMetricsNotFoundBody map[string]string
-
-// Validate validates this get metrics not found body
-func (o GetMetricsNotFoundBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }
 

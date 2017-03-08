@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
+
+	"github.com/intelsdi-x/snap-client-go/models"
 )
 
 // DeletePluginConfigItemReader is a Reader for the DeletePluginConfigItem structure.
@@ -52,13 +52,19 @@ func NewDeletePluginConfigItemOK() *DeletePluginConfigItemOK {
 PluginConfigItem represents cdata.ConfigDataNode which implements it's own UnmarshalJSON.
 */
 type DeletePluginConfigItemOK struct {
+	Payload models.ConfigDataNode
 }
 
 func (o *DeletePluginConfigItemOK) Error() string {
-	return fmt.Sprintf("[DELETE /plugins/{ptype}/{pname}/{pversion}/config][%d] deletePluginConfigItemOK ", 200)
+	return fmt.Sprintf("[DELETE /plugins/{ptype}/{pname}/{pversion}/config][%d] deletePluginConfigItemOK  %+v", 200, o.Payload)
 }
 
 func (o *DeletePluginConfigItemOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
 
 	return nil
 }
@@ -73,7 +79,7 @@ func NewDeletePluginConfigItemBadRequest() *DeletePluginConfigItemBadRequest {
 Error unsuccessful generic response to a failed API call
 */
 type DeletePluginConfigItemBadRequest struct {
-	Payload DeletePluginConfigItemBadRequestBody
+	Payload *models.Error
 }
 
 func (o *DeletePluginConfigItemBadRequest) Error() string {
@@ -82,29 +88,12 @@ func (o *DeletePluginConfigItemBadRequest) Error() string {
 
 func (o *DeletePluginConfigItemBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
-	return nil
-}
-
-/*DeletePluginConfigItemBadRequestBody delete plugin config item bad request body
-swagger:model DeletePluginConfigItemBadRequestBody
-*/
-type DeletePluginConfigItemBadRequestBody map[string]string
-
-// Validate validates this delete plugin config item bad request body
-func (o DeletePluginConfigItemBadRequestBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }

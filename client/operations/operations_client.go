@@ -253,7 +253,7 @@ func (a *Client) GetTasks(params *GetTasksParams) (*GetTasksOK, error) {
 /*
 LoadPlugin loads a plugin based on input
 */
-func (a *Client) LoadPlugin(params *LoadPluginParams) (*LoadPluginOK, *LoadPluginCreated, error) {
+func (a *Client) LoadPlugin(params *LoadPluginParams) (*LoadPluginCreated, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewLoadPluginParams()
@@ -272,15 +272,9 @@ func (a *Client) LoadPlugin(params *LoadPluginParams) (*LoadPluginOK, *LoadPlugi
 		Client:             params.HTTPClient,
 	})
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	switch value := result.(type) {
-	case *LoadPluginOK:
-		return value, nil, nil
-	case *LoadPluginCreated:
-		return nil, value, nil
-	}
-	return nil, nil, nil
+	return result.(*LoadPluginCreated), nil
 
 }
 
@@ -343,7 +337,7 @@ func (a *Client) SetPluginConfigItem(params *SetPluginConfigItemParams) (*SetPlu
 /*
 UnloadPlugin unloads a plugin by its type name and version otherwise an error is returned
 */
-func (a *Client) UnloadPlugin(params *UnloadPluginParams) (*UnloadPluginOK, *UnloadPluginNoContent, error) {
+func (a *Client) UnloadPlugin(params *UnloadPluginParams) (*UnloadPluginNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUnloadPluginParams()
@@ -362,15 +356,9 @@ func (a *Client) UnloadPlugin(params *UnloadPluginParams) (*UnloadPluginOK, *Unl
 		Client:             params.HTTPClient,
 	})
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	switch value := result.(type) {
-	case *UnloadPluginOK:
-		return value, nil, nil
-	case *UnloadPluginNoContent:
-		return nil, value, nil
-	}
-	return nil, nil, nil
+	return result.(*UnloadPluginNoContent), nil
 
 }
 

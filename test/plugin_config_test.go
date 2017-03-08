@@ -22,6 +22,7 @@ limitations under the License.
 package test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/intelsdi-x/snap-client-go/client/operations"
@@ -47,7 +48,7 @@ func TestGetPluginConfigItems(t *testing.T) {
 			params.SetPversion(int64(2))
 
 			resp, err := op.GetPluginConfigItem(params)
-			So(resp, ShouldResemble, &operations.GetPluginConfigItemOK{})
+			So(resp.Payload, ShouldResemble, map[string]interface{}{"config": map[string]interface{}{}})
 			So(err, ShouldBeNil)
 		})
 	})
@@ -86,7 +87,7 @@ func TestUpdatePluginConfigItems(t *testing.T) {
 
 			resp, err := op.SetPluginConfigItem(params)
 			So(err, ShouldBeNil)
-			So(resp, ShouldResemble, &operations.SetPluginConfigItemOK{})
+			So(resp.Payload, ShouldResemble, map[string]interface{}{"config": map[string]interface{}{"somebool": false, "somefloat": json.Number("3.1418"), "someint": json.Number("1234567"), "user": "jean"}})
 		})
 	})
 }
@@ -112,7 +113,7 @@ func TestDeletePluginConfigItems(t *testing.T) {
 
 			resp, err := op.DeletePluginConfigItem(params)
 			So(err, ShouldBeNil)
-			So(resp, ShouldResemble, &operations.DeletePluginConfigItemOK{})
+			So(resp.Payload, ShouldNotBeNil)
 		})
 	})
 }

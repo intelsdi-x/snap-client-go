@@ -7,9 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -83,7 +81,7 @@ func NewGetTaskNotFound() *GetTaskNotFound {
 Error unsuccessful generic response to a failed API call
 */
 type GetTaskNotFound struct {
-	Payload GetTaskNotFoundBody
+	Payload *models.Error
 }
 
 func (o *GetTaskNotFound) Error() string {
@@ -92,29 +90,12 @@ func (o *GetTaskNotFound) Error() string {
 
 func (o *GetTaskNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
-	return nil
-}
-
-/*GetTaskNotFoundBody get task not found body
-swagger:model GetTaskNotFoundBody
-*/
-type GetTaskNotFoundBody map[string]string
-
-// Validate validates this get task not found body
-func (o GetTaskNotFoundBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }

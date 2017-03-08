@@ -9,7 +9,6 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
 	strfmt "github.com/go-openapi/strfmt"
@@ -82,7 +81,7 @@ func NewAddTaskInternalServerError() *AddTaskInternalServerError {
 Error unsuccessful generic response to a failed API call
 */
 type AddTaskInternalServerError struct {
-	Payload AddTaskInternalServerErrorBody
+	Payload *models.Error
 }
 
 func (o *AddTaskInternalServerError) Error() string {
@@ -91,8 +90,10 @@ func (o *AddTaskInternalServerError) Error() string {
 
 func (o *AddTaskInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Error)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -130,24 +131,5 @@ func (o *AddTaskCreatedBody) validateTasks(formats strfmt.Registry) error {
 		return err
 	}
 
-	return nil
-}
-
-/*AddTaskInternalServerErrorBody add task internal server error body
-swagger:model AddTaskInternalServerErrorBody
-*/
-type AddTaskInternalServerErrorBody map[string]string
-
-// Validate validates this add task internal server error body
-func (o AddTaskInternalServerErrorBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if swag.IsZero(o) { // not required
-		return nil
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }

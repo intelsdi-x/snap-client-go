@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 )
@@ -19,7 +20,7 @@ import (
 // NewGetMetricsParams creates a new GetMetricsParams object
 // with the default values initialized.
 func NewGetMetricsParams() *GetMetricsParams {
-
+	var ()
 	return &GetMetricsParams{
 
 		timeout: cr.DefaultTimeout,
@@ -29,7 +30,7 @@ func NewGetMetricsParams() *GetMetricsParams {
 // NewGetMetricsParamsWithTimeout creates a new GetMetricsParams object
 // with the default values initialized, and the ability to set a timeout on a request
 func NewGetMetricsParamsWithTimeout(timeout time.Duration) *GetMetricsParams {
-
+	var ()
 	return &GetMetricsParams{
 
 		timeout: timeout,
@@ -39,7 +40,7 @@ func NewGetMetricsParamsWithTimeout(timeout time.Duration) *GetMetricsParams {
 // NewGetMetricsParamsWithContext creates a new GetMetricsParams object
 // with the default values initialized, and the ability to set a context for a request
 func NewGetMetricsParamsWithContext(ctx context.Context) *GetMetricsParams {
-
+	var ()
 	return &GetMetricsParams{
 
 		Context: ctx,
@@ -49,7 +50,7 @@ func NewGetMetricsParamsWithContext(ctx context.Context) *GetMetricsParams {
 // NewGetMetricsParamsWithHTTPClient creates a new GetMetricsParams object
 // with the default values initialized, and the ability to set a custom HTTPClient for a request
 func NewGetMetricsParamsWithHTTPClient(client *http.Client) *GetMetricsParams {
-
+	var ()
 	return &GetMetricsParams{
 		HTTPClient: client,
 	}
@@ -59,6 +60,12 @@ func NewGetMetricsParamsWithHTTPClient(client *http.Client) *GetMetricsParams {
 for the get metrics operation typically these are written to a http.Request
 */
 type GetMetricsParams struct {
+
+	/*Ns*/
+	Ns *string
+	/*Ver*/
+	Ver *int64
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -97,11 +104,65 @@ func (o *GetMetricsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithNs adds the ns to the get metrics params
+func (o *GetMetricsParams) WithNs(ns *string) *GetMetricsParams {
+	o.SetNs(ns)
+	return o
+}
+
+// SetNs adds the ns to the get metrics params
+func (o *GetMetricsParams) SetNs(ns *string) {
+	o.Ns = ns
+}
+
+// WithVer adds the ver to the get metrics params
+func (o *GetMetricsParams) WithVer(ver *int64) *GetMetricsParams {
+	o.SetVer(ver)
+	return o
+}
+
+// SetVer adds the ver to the get metrics params
+func (o *GetMetricsParams) SetVer(ver *int64) {
+	o.Ver = ver
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *GetMetricsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
 	r.SetTimeout(o.timeout)
 	var res []error
+
+	if o.Ns != nil {
+
+		// query param ns
+		var qrNs string
+		if o.Ns != nil {
+			qrNs = *o.Ns
+		}
+		qNs := qrNs
+		if qNs != "" {
+			if err := r.SetQueryParam("ns", qNs); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if o.Ver != nil {
+
+		// query param ver
+		var qrVer int64
+		if o.Ver != nil {
+			qrVer = *o.Ver
+		}
+		qVer := swag.FormatInt64(qrVer)
+		if qVer != "" {
+			if err := r.SetQueryParam("ver", qVer); err != nil {
+				return err
+			}
+		}
+
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
