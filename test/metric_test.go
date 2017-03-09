@@ -25,10 +25,8 @@ import (
 	"os"
 	"testing"
 
-	httptransport "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/strfmt"
-	"github.com/intelsdi-x/snap-client-go/client"
 	"github.com/intelsdi-x/snap-client-go/client/operations"
+	"github.com/intelsdi-x/snap-client-go/snap"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -38,13 +36,36 @@ const (
 )
 
 func TestGetMetrics(t *testing.T) {
-	op := getOperationClient(getHost(), snapBasePath, snapScheme)
+	c := snap.New(snap.ClientParams{URL: getUrl()})
+	ns := "/intel/mock/foo"
+	ver := int64(1)
 
 	Convey("Testing GetMetrics", t, func() {
 		Convey("Test get a list of metrics", func() {
 			params := operations.NewGetMetricsParams()
 
-			resp, err := op.GetMetrics(params)
+			resp, err := c.GetMetrics(params)
+			So(err, ShouldBeNil)
+			So(resp.Payload, ShouldNotBeNil)
+			So(len(resp.Payload.Metrics), ShouldBeGreaterThan, 0)
+		})
+
+		Convey("Test get a metric for all its versions", func() {
+			params := operations.NewGetMetricsParams()
+			params.SetNs(&ns)
+
+			resp, err := c.GetMetrics(params)
+			So(err, ShouldBeNil)
+			So(resp.Payload, ShouldNotBeNil)
+			So(len(resp.Payload.Metrics), ShouldBeGreaterThan, 0)
+		})
+
+		Convey("Test get a metric", func() {
+			params := operations.NewGetMetricsParams()
+			params.SetNs(&ns)
+			params.SetVer(&ver)
+
+			resp, err := c.GetMetrics(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(len(resp.Payload.Metrics), ShouldBeGreaterThan, 0)
@@ -52,14 +73,7 @@ func TestGetMetrics(t *testing.T) {
 	})
 }
 
-func getOperationClient(host, basePath, scheme string) *operations.Client {
-	transport := httptransport.New(host, basePath, []string{scheme})
-	tc := client.New(transport, strfmt.Default)
-
-	return tc.Operations
-}
-
-func getHost() string {
+func getUrl() string {
 	host := os.Getenv("SNAP_CLIENT_GO_HOST") + ":8181"
 	if host == ":8181" {
 		host = "127.0.0.1:8181"

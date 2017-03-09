@@ -26,17 +26,18 @@ import (
 	"testing"
 
 	"github.com/intelsdi-x/snap-client-go/client/operations"
+	"github.com/intelsdi-x/snap-client-go/snap"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestGetPlugins(t *testing.T) {
-	op := getOperationClient(getHost(), snapBasePath, snapScheme)
+	c := snap.New(snap.ClientParams{URL: getUrl()})
 
 	Convey("Testing GetPlugins", t, func() {
 		Convey("Test get a list of plugins", func() {
 			params := operations.NewGetPluginsParams()
 
-			resp, err := op.GetPlugins(params)
+			resp, err := c.GetPlugins(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload.Plugins, ShouldNotBeNil)
 		})
@@ -47,7 +48,7 @@ func TestGetPlugins(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(2))
 
-			resp, err := op.GetPlugin(params)
+			resp, err := c.GetPlugin(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload.Name, ShouldNotBeNil)
 		})
@@ -58,7 +59,7 @@ func TestGetPlugins(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			resp, err := op.GetPlugin(params)
+			resp, err := c.GetPlugin(params)
 			So(err, ShouldNotBeNil)
 			So(resp, ShouldBeNil)
 		})
@@ -66,7 +67,7 @@ func TestGetPlugins(t *testing.T) {
 }
 
 func TestUnloadPlugin(t *testing.T) {
-	op := getOperationClient(getHost(), snapBasePath, snapScheme)
+	c := snap.New(snap.ClientParams{URL: getUrl()})
 
 	Convey("Testing Unload a plugin", t, func() {
 		Convey("Test unload an existing plugin", func() {
@@ -75,7 +76,7 @@ func TestUnloadPlugin(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			resp, err := op.UnloadPlugin(params)
+			resp, err := c.UnloadPlugin(params)
 			So(err, ShouldBeNil)
 			So(resp, ShouldNotBeNil)
 		})
@@ -86,7 +87,7 @@ func TestUnloadPlugin(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			resp, err := op.UnloadPlugin(params)
+			resp, err := c.UnloadPlugin(params)
 			So(err, ShouldNotBeNil)
 			So(resp, ShouldBeNil)
 		})
@@ -94,7 +95,7 @@ func TestUnloadPlugin(t *testing.T) {
 }
 
 func TestLoadPlugin(t *testing.T) {
-	op := getOperationClient(getHost(), snapBasePath, snapScheme)
+	c := snap.New(snap.ClientParams{URL: getUrl()})
 
 	Convey("Testing load a plugin", t, func() {
 		Convey("Test load an existing plugin", func() {
@@ -106,7 +107,7 @@ func TestLoadPlugin(t *testing.T) {
 			defer f.Close()
 
 			params.SetPluginData(f)
-			resp, err := op.LoadPlugin(params)
+			resp, err := c.LoadPlugin(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload.Name, ShouldEqual, "mock")
 			So(resp.Payload.Version, ShouldEqual, 1)

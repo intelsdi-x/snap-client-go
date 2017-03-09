@@ -24,16 +24,22 @@ package test
 import (
 	"testing"
 
-	"github.com/intelsdi-x/snap-client-go/client"
+	"github.com/intelsdi-x/snap-client-go/client/operations"
+	"github.com/intelsdi-x/snap-client-go/snap"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestClient(t *testing.T) {
+
 	Convey("Testing Client", t, func() {
 		Convey("Test a default client", func() {
-			c := client.Default
+			c := snap.New(snap.ClientParams{})
 			So(c, ShouldNotBeNil)
-			So(c.Operations, ShouldNotBeNil)
+		})
+		Convey("Test get plugin with empty params", func() {
+			c := snap.New(snap.ClientParams{})
+			_, err := c.GetPlugin(operations.NewGetPluginParams())
+			So(err, ShouldNotBeNil)
 		})
 	})
 }

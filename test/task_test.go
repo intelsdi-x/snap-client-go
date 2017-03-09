@@ -27,18 +27,19 @@ import (
 	"testing"
 
 	"github.com/intelsdi-x/snap-client-go/client/operations"
+	"github.com/intelsdi-x/snap-client-go/snap"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestAddTask(t *testing.T) {
-	op := getOperationClient(getHost(), snapBasePath, snapScheme)
+	c := snap.New(snap.ClientParams{URL: getUrl()})
 
 	Convey("Testing AddTask", t, func() {
 		Convey("Test add a task", func() {
 			params := operations.NewAddTaskParams()
 			params.SetTask(`{"version":1,"schedule":{"type":"simple","interval":"15s"},"workflow":{"collect":{"metrics":{"/intel/mock/foo":{},"/intel/mock/bar":{},"/intel/mock/*/baz":{}},"config":{"/intel/mock":{"user":"root","password":"secret"}},"process":null,"publish":[{"plugin_name":"file","config":{"file":"/tmp/collected_swagger"}}]}}}`)
 
-			resp, err := op.AddTask(params)
+			resp, err := c.AddTask(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 		})
@@ -46,14 +47,14 @@ func TestAddTask(t *testing.T) {
 }
 
 func TestTask(t *testing.T) {
-	op := getOperationClient(getHost(), snapBasePath, snapScheme)
+	c := snap.New(snap.ClientParams{URL: getUrl()})
 
 	var id string
 	Convey("Testing Tasks", t, func() {
 		Convey("Test get a list of tasks", func() {
 			params := operations.NewGetTasksParams()
 
-			resp, err := op.GetTasks(params)
+			resp, err := c.GetTasks(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(len(resp.Payload.Tasks), ShouldBeGreaterThan, 0)
@@ -64,7 +65,7 @@ func TestTask(t *testing.T) {
 			params := operations.NewGetTaskParams()
 			params.SetID(id)
 
-			resp, err := op.GetTask(params)
+			resp, err := c.GetTask(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(resp.Payload.ID, ShouldEqual, id)
@@ -75,13 +76,13 @@ func TestTask(t *testing.T) {
 			params.SetID(id)
 			params.SetAction("start")
 
-			resp, err := op.UpdateTaskState(params)
+			resp, err := c.UpdateTaskState(params)
 			So(err, ShouldBeNil)
 			So(resp, ShouldNotBeNil)
 		})
 
 		Convey("Test watch a task", func() {
-			resp, err := http.Get(fmt.Sprintf("http://%s/%s/tasks/:%s/watch", getHost(), snapBasePath, id))
+			resp, err := http.Get(fmt.Sprintf("http://%s/%s/tasks/:%s/watch", getUrl(), snapBasePath, id))
 			So(err, ShouldBeNil)
 			So(resp, ShouldNotBeNil)
 		})
@@ -91,7 +92,7 @@ func TestTask(t *testing.T) {
 			params.SetID(id)
 			params.SetAction("stop")
 
-			resp, err := op.UpdateTaskState(params)
+			resp, err := c.UpdateTaskState(params)
 			So(err, ShouldBeNil)
 			So(resp, ShouldNotBeNil)
 		})
@@ -100,7 +101,7 @@ func TestTask(t *testing.T) {
 			params := operations.NewRemoveTaskParams()
 			params.SetID(id)
 
-			_, err := op.RemoveTask(params)
+			_, err := c.RemoveTask(params)
 			So(err, ShouldBeNil)
 		})
 	})

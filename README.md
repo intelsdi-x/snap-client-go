@@ -7,27 +7,195 @@ This repo has [Snap](https://github.com/intelsdi-x/snap) restful Go clients gene
 
 You can browse and test Snap APIs interactively by leveraging tools like [swagger-ui](https://github.com/swagger-api/swagger-ui) or [apistudio.io](http://apistudio.io/).
 
-If any change for swagger.json specification, running the command `make` to generate a new client.
+If any change for swagger.json specification, running the command `make` to generate a new client whenever the specification changes.
 
-## Creating clients
+## Creating client
 
-The default client is `Default` if running client locally. Generated client is in the package of client and models. Please refer to package test for examples.
+Creating a default client by using an empty param object. If supplying the different host info, API version, or scheme, it creates a custom client.
 
 ### Default client
 
 ```sh
-  opc := Default.operations
+  c := snap.New(snap.ClientParams{})
 ```
 
 ### Custom client
 
 ```sh
-  import httptransport "github.com/go-openapi/runtime/client"
-  import "github.com/go-openapi/strfmt"
+  c := snap.New(snap.ClientParam{URL: "example.com:80", APIVersion: "v2", Scheme: "http"})
+```
 
-  transport := httptransport.New(host, basePath, scheme)
-  tc := client.New(transport, strfmt.Default)
-  opc := client.opertions
+## Operations
+
+For operations, simply do following with appropriate parameters required by the specification. Let's assume `c` is the client created and examples:
+
+### Get plugins
+
+```sh
+getPlugins, err := c.GetPlugins(operations.NewGetPluginsParams())
+```
+
+### Get a plugin
+
+```sh
+params := operations.NewGetPluginParams()
+params.SetPtype("collector")
+params.SetPname("mock")
+params.SetPversion(int64(1))
+
+getPlugin, err := c.GetPlugin(params)
+```
+
+### Load a plugin
+
+```sh
+params := operations.NewLoadPluginParams()
+params.SetPluginData(<*os.file>)
+
+loadPlugin, err := c.LoadPlugin(params)
+```
+
+### Unload a plugin
+
+```sh
+params := operations.NewUnloadPluginParams()
+params.SetPtype("collector")
+params.SetPname("mock")
+params.SetPversion(int64(1))
+
+unloadPlugin, err := c.UnloadPlugin(params)
+```
+
+### Get a plugin config
+
+```sh
+params := operations.NewGetPluginConfigItemParams()
+params.SetPname("mock")
+params.SetPtype("collector")
+params.SetPversion(int64(1))
+
+getPluginConfig, err := c.GetPluginConfigItem(params)
+```
+
+### Update a plugin config
+
+```sh
+cfg := `{"user":"jean","someint":1234567,"somefloat":3.1418,"somebool":false}`
+
+params := operations.NewSetPluginConfigItemParams()
+params.SetPname("mock")
+params.SetPtype("collector")
+params.SetPversion(int64(1))
+params.SetConfig(&cfg)
+
+setPluginConfig, err := c.SetPluginConfigItem(params)
+```
+
+### Delete a plugin config
+
+```sh
+params := operations.NewDeletePluginConfigItemParams()
+params.SetPname("mock")
+params.SetPtype("collector")
+params.SetPversion(int64(1))
+params.SetConfig([]string{"somefloat", "someint"})
+
+deletePluginConfig, err := c.DeletePluginConfigItem(params)
+```
+
+### Get metrics
+
+```sh
+params := operations.NewGetMetricsParams()
+
+getMetrics, err := c.GetMetrics(params)
+```
+
+### Get metrics giving a namespace
+
+```sh
+ns := "/intel/mock/bar"
+params := operations.NewGetMetricsParams()
+params.SetNs(&ns)
+
+getMetrics, err := c.GetMetrics(params)
+```
+
+### Get a metric
+
+```sh
+ns := "/intel/mock/bar"
+ver := int64(1)
+params := operations.NewGetMetricsParams()
+params.SetNs(&ns)
+params.SetVer(&ver)
+
+getMetric, err := c.GetMetrics(params)
+```
+
+### Get tasks
+
+```sh
+params := operations.NewGetTasksParams()
+
+getTasks, err := c.GetTasks(params)
+```
+
+### Get a task
+
+```sh
+params := operations.NewGetTaskParams()
+params.SetID(id)
+
+getTask, err := c.GetTask(params)
+```
+
+### Create a task
+
+```sh
+params := operations.NewAddTaskParams()
+params.SetTask(<task manifest> || <workflow manifest>)
+
+createTask, err := c.AddTask(params)
+```
+
+### Start a task
+
+```sh
+params := operations.NewUpdateTaskStateParams()
+params.SetID(<task id>)
+params.SetAction("start")
+
+startTask, err := c.UpdateTaskState(params)
+```
+
+### Stop a task
+
+```sh
+params := operations.NewUpdateTaskStateParams()
+params.SetID(<task id>)
+params.SetAction("stop")
+
+stopTask, err := c.UpdateTaskState(params)
+```
+
+### Enable a task
+
+```sh
+params := operations.NewUpdateTaskStateParams()
+params.SetID(<task id>)
+params.SetAction("enable")
+
+enableTask, err := c.UpdateTaskState(params)
+```
+
+### Remove a task
+
+```sh
+params := operations.NewRemoveTaskParams()
+params.SetID(<task id>)
+
+removeTask, err := c.RemoveTask(params)
 ```
 
 ## Running tests
