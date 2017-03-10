@@ -22,9 +22,21 @@ set -u
 set -o pipefail
 
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+__file="${__dir}/../../snap/swagger.json"
 
-rm -rf ${__dir}/../client
-rm -rf ${__dir}/../models
+# shellcheck source=scripts/common.sh
+. "${__dir}/common.sh"
 
-swagger generate client -f ${__dir}/../swagger.json -A snap
+if [ -f "${__file}" ]
+then
+    rm -rf ${__dir}/../client
+    rm -rf ${__dir}/../models
+    swagger generate client -f ${__file} -A snap
+else
+    msg="${__file} not found.
+        please run the following command to get Snap in your GOPATH.
+        go get github.com/intelsdi-x/snap"
+
+   _error $msg
+fi
 

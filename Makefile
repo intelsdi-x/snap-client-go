@@ -18,7 +18,6 @@
 
 default:
 	$(MAKE) deps
-	$(MAKE) swagger-client
 	$(MAKE) all
 deps:
 	bash -c "./scripts/deps.sh"
@@ -40,4 +39,4 @@ check:
 all:
 	bash -c "./scripts/build.sh"
 swagger-client:
-	bash -v "./scripts/swagger-gen.sh"
+	bash -c "./scripts/swagger-gen.sh"
