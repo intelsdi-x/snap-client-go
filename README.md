@@ -32,13 +32,13 @@ For operations, simply do following with appropriate parameters required by the 
 ### Get plugins
 
 ```sh
-getPlugins, err := c.GetPlugins(operations.NewGetPluginsParams())
+getPlugins, err := c.GetPlugins(snap.NewGetPluginsParams())
 ```
 
 ### Get a plugin
 
 ```sh
-params := operations.NewGetPluginParams()
+params := snap.NewGetPluginParams()
 params.SetPtype("collector")
 params.SetPname("mock")
 params.SetPversion(int64(1))
@@ -49,7 +49,7 @@ getPlugin, err := c.GetPlugin(params)
 ### Load a plugin
 
 ```sh
-params := operations.NewLoadPluginParams()
+params := snap.NewLoadPluginParams()
 params.SetPluginData(<*os.file>)
 
 loadPlugin, err := c.LoadPlugin(params)
@@ -58,7 +58,7 @@ loadPlugin, err := c.LoadPlugin(params)
 ### Unload a plugin
 
 ```sh
-params := operations.NewUnloadPluginParams()
+params := snap.NewUnloadPluginParams()
 params.SetPtype("collector")
 params.SetPname("mock")
 params.SetPversion(int64(1))
@@ -69,7 +69,7 @@ unloadPlugin, err := c.UnloadPlugin(params)
 ### Get a plugin config
 
 ```sh
-params := operations.NewGetPluginConfigItemParams()
+params := snap.NewGetPluginConfigItemParams()
 params.SetPname("mock")
 params.SetPtype("collector")
 params.SetPversion(int64(1))
@@ -82,7 +82,7 @@ getPluginConfig, err := c.GetPluginConfigItem(params)
 ```sh
 cfg := `{"user":"jean","someint":1234567,"somefloat":3.1418,"somebool":false}`
 
-params := operations.NewSetPluginConfigItemParams()
+params := snap.NewSetPluginConfigItemParams()
 params.SetPname("mock")
 params.SetPtype("collector")
 params.SetPversion(int64(1))
@@ -94,7 +94,7 @@ setPluginConfig, err := c.SetPluginConfigItem(params)
 ### Delete a plugin config
 
 ```sh
-params := operations.NewDeletePluginConfigItemParams()
+params := snap.NewDeletePluginConfigItemParams()
 params.SetPname("mock")
 params.SetPtype("collector")
 params.SetPversion(int64(1))
@@ -106,7 +106,7 @@ deletePluginConfig, err := c.DeletePluginConfigItem(params)
 ### Get metrics
 
 ```sh
-params := operations.NewGetMetricsParams()
+params := snap.NewGetMetricsParams()
 
 getMetrics, err := c.GetMetrics(params)
 ```
@@ -115,7 +115,7 @@ getMetrics, err := c.GetMetrics(params)
 
 ```sh
 ns := "/intel/mock/bar"
-params := operations.NewGetMetricsParams()
+params := snap.NewGetMetricsParams()
 params.SetNs(&ns)
 
 getMetrics, err := c.GetMetrics(params)
@@ -126,7 +126,7 @@ getMetrics, err := c.GetMetrics(params)
 ```sh
 ns := "/intel/mock/bar"
 ver := int64(1)
-params := operations.NewGetMetricsParams()
+params := snap.NewGetMetricsParams()
 params.SetNs(&ns)
 params.SetVer(&ver)
 
@@ -136,7 +136,7 @@ getMetric, err := c.GetMetrics(params)
 ### Get tasks
 
 ```sh
-params := operations.NewGetTasksParams()
+params := snap.NewGetTasksParams()
 
 getTasks, err := c.GetTasks(params)
 ```
@@ -144,7 +144,7 @@ getTasks, err := c.GetTasks(params)
 ### Get a task
 
 ```sh
-params := operations.NewGetTaskParams()
+params := snap.NewGetTaskParams()
 params.SetID(id)
 
 getTask, err := c.GetTask(params)
@@ -153,7 +153,7 @@ getTask, err := c.GetTask(params)
 ### Create a task
 
 ```sh
-params := operations.NewAddTaskParams()
+params := snap.NewAddTaskParams()
 params.SetTask(<task manifest> || <workflow manifest>)
 
 createTask, err := c.AddTask(params)
@@ -162,7 +162,7 @@ createTask, err := c.AddTask(params)
 ### Start a task
 
 ```sh
-params := operations.NewUpdateTaskStateParams()
+params := snap.NewUpdateTaskStateParams()
 params.SetID(<task id>)
 params.SetAction("start")
 
@@ -172,7 +172,7 @@ startTask, err := c.UpdateTaskState(params)
 ### Stop a task
 
 ```sh
-params := operations.NewUpdateTaskStateParams()
+params := snap.NewUpdateTaskStateParams()
 params.SetID(<task id>)
 params.SetAction("stop")
 
@@ -182,7 +182,7 @@ stopTask, err := c.UpdateTaskState(params)
 ### Enable a task
 
 ```sh
-params := operations.NewUpdateTaskStateParams()
+params := snap.NewUpdateTaskStateParams()
 params.SetID(<task id>)
 params.SetAction("enable")
 
@@ -192,7 +192,7 @@ enableTask, err := c.UpdateTaskState(params)
 ### Remove a task
 
 ```sh
-params := operations.NewRemoveTaskParams()
+params := snap.NewRemoveTaskParams()
 params.SetID(<task id>)
 
 removeTask, err := c.RemoveTask(params)

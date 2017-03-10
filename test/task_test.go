@@ -26,7 +26,6 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/intelsdi-x/snap-client-go/client/operations"
 	"github.com/intelsdi-x/snap-client-go/snap"
 	. "github.com/smartystreets/goconvey/convey"
 )
@@ -36,7 +35,7 @@ func TestAddTask(t *testing.T) {
 
 	Convey("Testing AddTask", t, func() {
 		Convey("Test add a task", func() {
-			params := operations.NewAddTaskParams()
+			params := snap.NewAddTaskParams()
 			params.SetTask(`{"version":1,"schedule":{"type":"simple","interval":"15s"},"workflow":{"collect":{"metrics":{"/intel/mock/foo":{},"/intel/mock/bar":{},"/intel/mock/*/baz":{}},"config":{"/intel/mock":{"user":"root","password":"secret"}},"process":null,"publish":[{"plugin_name":"file","config":{"file":"/tmp/collected_swagger"}}]}}}`)
 
 			resp, err := c.AddTask(params)
@@ -52,7 +51,7 @@ func TestTask(t *testing.T) {
 	var id string
 	Convey("Testing Tasks", t, func() {
 		Convey("Test get a list of tasks", func() {
-			params := operations.NewGetTasksParams()
+			params := snap.NewGetTasksParams()
 
 			resp, err := c.GetTasks(params)
 			So(err, ShouldBeNil)
@@ -62,7 +61,7 @@ func TestTask(t *testing.T) {
 		})
 
 		Convey("Test get a task", func() {
-			params := operations.NewGetTaskParams()
+			params := snap.NewGetTaskParams()
 			params.SetID(id)
 
 			resp, err := c.GetTask(params)
@@ -72,7 +71,7 @@ func TestTask(t *testing.T) {
 		})
 
 		Convey("Test start a task", func() {
-			params := operations.NewUpdateTaskStateParams()
+			params := snap.NewUpdateTaskStateParams()
 			params.SetID(id)
 			params.SetAction("start")
 
@@ -88,7 +87,7 @@ func TestTask(t *testing.T) {
 		})
 
 		Convey("Test stop a task", func() {
-			params := operations.NewUpdateTaskStateParams()
+			params := snap.NewUpdateTaskStateParams()
 			params.SetID(id)
 			params.SetAction("stop")
 
@@ -98,7 +97,7 @@ func TestTask(t *testing.T) {
 		})
 
 		Convey("Test delete a task", func() {
-			params := operations.NewRemoveTaskParams()
+			params := snap.NewRemoveTaskParams()
 			params.SetID(id)
 
 			_, err := c.RemoveTask(params)

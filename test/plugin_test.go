@@ -25,7 +25,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/intelsdi-x/snap-client-go/client/operations"
 	"github.com/intelsdi-x/snap-client-go/snap"
 	. "github.com/smartystreets/goconvey/convey"
 )
@@ -35,7 +34,7 @@ func TestGetPlugins(t *testing.T) {
 
 	Convey("Testing GetPlugins", t, func() {
 		Convey("Test get a list of plugins", func() {
-			params := operations.NewGetPluginsParams()
+			params := snap.NewGetPluginsParams()
 
 			resp, err := c.GetPlugins(params)
 			So(err, ShouldBeNil)
@@ -43,7 +42,7 @@ func TestGetPlugins(t *testing.T) {
 		})
 
 		Convey("Test get a giving plugin", func() {
-			params := operations.NewGetPluginParams()
+			params := snap.NewGetPluginParams()
 			params.SetPname("mock")
 			params.SetPtype("collector")
 			params.SetPversion(int64(2))
@@ -54,7 +53,7 @@ func TestGetPlugins(t *testing.T) {
 		})
 
 		Convey("Test get a non-existing plugin", func() {
-			params := operations.NewGetPluginParams()
+			params := snap.NewGetPluginParams()
 			params.SetPname("mock1")
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
@@ -71,7 +70,7 @@ func TestUnloadPlugin(t *testing.T) {
 
 	Convey("Testing Unload a plugin", t, func() {
 		Convey("Test unload an existing plugin", func() {
-			params := operations.NewUnloadPluginParams()
+			params := snap.NewUnloadPluginParams()
 			params.SetPname("mock")
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
@@ -82,7 +81,7 @@ func TestUnloadPlugin(t *testing.T) {
 		})
 
 		Convey("Test unload a non-existing plugin", func() {
-			params := operations.NewUnloadPluginParams()
+			params := snap.NewUnloadPluginParams()
 			params.SetPname("mock3")
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
@@ -99,7 +98,7 @@ func TestLoadPlugin(t *testing.T) {
 
 	Convey("Testing load a plugin", t, func() {
 		Convey("Test load an existing plugin", func() {
-			params := operations.NewLoadPluginParams()
+			params := snap.NewLoadPluginParams()
 			f, err := os.Open("/tmp/snap-plugin-collector-mock1")
 			if err != nil {
 				t.Fatalf("\nNo plugin to load: %v", err)

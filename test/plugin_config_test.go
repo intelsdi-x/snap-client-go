@@ -25,7 +25,6 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/intelsdi-x/snap-client-go/client/operations"
 	"github.com/intelsdi-x/snap-client-go/snap"
 	. "github.com/smartystreets/goconvey/convey"
 )
@@ -35,7 +34,7 @@ func TestGetPluginConfigItems(t *testing.T) {
 
 	Convey("Testing GetPluginConfigItems", t, func() {
 		Convey("Test get the config without parameters", func() {
-			params := operations.NewGetPluginConfigItemParams()
+			params := snap.NewGetPluginConfigItemParams()
 
 			resp, err := c.GetPluginConfigItem(params)
 			So(err, ShouldNotBeNil)
@@ -43,7 +42,7 @@ func TestGetPluginConfigItems(t *testing.T) {
 		})
 
 		Convey("Test get the config with parameters", func() {
-			params := operations.NewGetPluginConfigItemParams()
+			params := snap.NewGetPluginConfigItemParams()
 			params.SetPname("mock")
 			params.SetPtype("collector")
 			params.SetPversion(int64(2))
@@ -60,7 +59,7 @@ func TestUpdatePluginConfigItems(t *testing.T) {
 
 	Convey("Testing UpdatePluginConfigItems", t, func() {
 		Convey("Test set the plugin config without parameters", func() {
-			params := operations.NewSetPluginConfigItemParams()
+			params := snap.NewSetPluginConfigItemParams()
 
 			resp, err := c.SetPluginConfigItem(params)
 			So(err, ShouldNotBeNil)
@@ -68,7 +67,7 @@ func TestUpdatePluginConfigItems(t *testing.T) {
 		})
 
 		Convey("Test set the plugin config without a config", func() {
-			params := operations.NewSetPluginConfigItemParams()
+			params := snap.NewSetPluginConfigItemParams()
 			params.SetPname("mock")
 			params.SetPtype("collector")
 			params.SetPversion(int64(2))
@@ -79,7 +78,7 @@ func TestUpdatePluginConfigItems(t *testing.T) {
 		})
 
 		Convey("Test set the plugin config with a config", func() {
-			params := operations.NewSetPluginConfigItemParams()
+			params := snap.NewSetPluginConfigItemParams()
 			params.SetPname("mock")
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
@@ -98,7 +97,7 @@ func TestDeletePluginConfigItems(t *testing.T) {
 
 	Convey("Testing DeletePluginConfigItems", t, func() {
 		Convey("Test delete the plugin config without parameters", func() {
-			params := operations.NewDeletePluginConfigItemParams()
+			params := snap.NewDeletePluginConfigItemParams()
 
 			rep, err := c.DeletePluginConfigItem(params)
 			So(err, ShouldNotBeNil)
@@ -106,7 +105,7 @@ func TestDeletePluginConfigItems(t *testing.T) {
 		})
 
 		Convey("Test delete the plugin config with parameters", func() {
-			params := operations.NewDeletePluginConfigItemParams()
+			params := snap.NewDeletePluginConfigItemParams()
 			params.SetPname("mock")
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))

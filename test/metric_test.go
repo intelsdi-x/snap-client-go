@@ -25,7 +25,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/intelsdi-x/snap-client-go/client/operations"
 	"github.com/intelsdi-x/snap-client-go/snap"
 	. "github.com/smartystreets/goconvey/convey"
 )
@@ -42,7 +41,7 @@ func TestGetMetrics(t *testing.T) {
 
 	Convey("Testing GetMetrics", t, func() {
 		Convey("Test get a list of metrics", func() {
-			params := operations.NewGetMetricsParams()
+			params := snap.NewGetMetricsParams()
 
 			resp, err := c.GetMetrics(params)
 			So(err, ShouldBeNil)
@@ -51,7 +50,7 @@ func TestGetMetrics(t *testing.T) {
 		})
 
 		Convey("Test get a metric for all its versions", func() {
-			params := operations.NewGetMetricsParams()
+			params := snap.NewGetMetricsParams()
 			params.SetNs(&ns)
 
 			resp, err := c.GetMetrics(params)
@@ -61,7 +60,7 @@ func TestGetMetrics(t *testing.T) {
 		})
 
 		Convey("Test get a metric", func() {
-			params := operations.NewGetMetricsParams()
+			params := snap.NewGetMetricsParams()
 			params.SetNs(&ns)
 			params.SetVer(&ver)
 
