@@ -15,14 +15,14 @@ import (
 type DynamicElement struct {
 
 	// description
-	Description string `json:"Description,omitempty"`
+	Description string `json:"description,omitempty"`
 
 	// index
-	Index int64 `json:"Index,omitempty"`
+	Index int64 `json:"index,omitempty"`
 
 	// name
 	// Required: true
-	Name *string `json:"Name"`
+	Name *string `json:"name"`
 }
 
 // Validate validates this dynamic element

@@ -18,22 +18,20 @@ import (
 type CollectWorkflowMapNode struct {
 
 	// config
-	Config map[string]map[string]interface{} `json:"Config,omitempty"`
+	Config map[string]map[string]interface{} `json:"config,omitempty"`
 
 	// metrics
 	// Required: true
-	Metrics map[string]MetricInfo `json:"Metrics"`
+	Metrics map[string]MetricInfo `json:"metrics"`
 
 	// process
-	// Required: true
-	Process []*ProcessWorkflowMapNode `json:"Process"`
+	Process []*ProcessWorkflowMapNode `json:"process"`
 
 	// publish
-	// Required: true
-	Publish []*PublishWorkflowMapNode `json:"Publish"`
+	Publish []*PublishWorkflowMapNode `json:"publish"`
 
 	// tags
-	Tags map[string]map[string]string `json:"Tags,omitempty"`
+	Tags map[string]map[string]string `json:"tags,omitempty"`
 }
 
 // Validate validates this collect workflow map node
@@ -72,8 +70,8 @@ func (m *CollectWorkflowMapNode) validateMetrics(formats strfmt.Registry) error 
 
 func (m *CollectWorkflowMapNode) validateProcess(formats strfmt.Registry) error {
 
-	if err := validate.Required("process", "body", m.Process); err != nil {
-		return err
+	if swag.IsZero(m.Process) { // not required
+		return nil
 	}
 
 	for i := 0; i < len(m.Process); i++ {
@@ -99,8 +97,8 @@ func (m *CollectWorkflowMapNode) validateProcess(formats strfmt.Registry) error 
 
 func (m *CollectWorkflowMapNode) validatePublish(formats strfmt.Registry) error {
 
-	if err := validate.Required("publish", "body", m.Publish); err != nil {
-		return err
+	if swag.IsZero(m.Publish) { // not required
+		return nil
 	}
 
 	for i := 0; i < len(m.Publish); i++ {

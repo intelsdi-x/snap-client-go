@@ -145,7 +145,7 @@ type GetMetricsOKBody struct {
 
 	// metrics
 	// Required: true
-	Metrics []*models.Metric `json:"Metrics"`
+	Metrics []*models.Metric `json:"metrics"`
 }
 
 // Validate validates this get metrics o k body

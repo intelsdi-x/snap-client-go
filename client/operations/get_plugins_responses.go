@@ -73,7 +73,7 @@ type GetPluginsOKBody struct {
 
 	// plugins
 	// Required: true
-	Plugins []*models.Plugin `json:"Plugins"`
+	Plugins []*models.Plugin `json:"plugins"`
 }
 
 // Validate validates this get plugins o k body

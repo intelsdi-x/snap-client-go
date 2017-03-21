@@ -18,32 +18,30 @@ import (
 type ProcessWorkflowMapNode struct {
 
 	// TODO processor config
-	Config map[string]interface{} `json:"Config,omitempty"`
+	Config map[string]interface{} `json:"config,omitempty"`
 
-	// name
+	// plugin name
 	// Required: true
-	Name *string `json:"Name"`
+	PluginName *string `json:"plugin_name"`
+
+	// plugin version
+	PluginVersion int64 `json:"plugin_version,omitempty"`
 
 	// process
-	// Required: true
-	Process []*ProcessWorkflowMapNode `json:"Process"`
+	Process []*ProcessWorkflowMapNode `json:"process"`
 
 	// publish
-	// Required: true
-	Publish []*PublishWorkflowMapNode `json:"Publish"`
+	Publish []*PublishWorkflowMapNode `json:"publish"`
 
 	// target
-	Target string `json:"Target,omitempty"`
-
-	// version
-	Version int64 `json:"Version,omitempty"`
+	Target string `json:"target,omitempty"`
 }
 
 // Validate validates this process workflow map node
 func (m *ProcessWorkflowMapNode) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateName(formats); err != nil {
+	if err := m.validatePluginName(formats); err != nil {
 		// prop
 		res = append(res, err)
 	}
@@ -64,9 +62,9 @@ func (m *ProcessWorkflowMapNode) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ProcessWorkflowMapNode) validateName(formats strfmt.Registry) error {
+func (m *ProcessWorkflowMapNode) validatePluginName(formats strfmt.Registry) error {
 
-	if err := validate.Required("name", "body", m.Name); err != nil {
+	if err := validate.Required("plugin_name", "body", m.PluginName); err != nil {
 		return err
 	}
 
@@ -75,8 +73,8 @@ func (m *ProcessWorkflowMapNode) validateName(formats strfmt.Registry) error {
 
 func (m *ProcessWorkflowMapNode) validateProcess(formats strfmt.Registry) error {
 
-	if err := validate.Required("process", "body", m.Process); err != nil {
-		return err
+	if swag.IsZero(m.Process) { // not required
+		return nil
 	}
 
 	for i := 0; i < len(m.Process); i++ {
@@ -102,8 +100,8 @@ func (m *ProcessWorkflowMapNode) validateProcess(formats strfmt.Registry) error 
 
 func (m *ProcessWorkflowMapNode) validatePublish(formats strfmt.Registry) error {
 
-	if err := validate.Required("publish", "body", m.Publish); err != nil {
-		return err
+	if swag.IsZero(m.Publish) { // not required
+		return nil
 	}
 
 	for i := 0; i < len(m.Publish); i++ {

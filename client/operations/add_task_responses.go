@@ -7,9 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/validate"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -51,10 +49,10 @@ func NewAddTaskCreated() *AddTaskCreated {
 
 /*AddTaskCreated handles this case with default header values.
 
-TasksResp returns a list of created tasks.
+TaskResp returns the giving task.
 */
 type AddTaskCreated struct {
-	Payload AddTaskCreatedBody
+	Payload *models.Task
 }
 
 func (o *AddTaskCreated) Error() string {
@@ -63,8 +61,10 @@ func (o *AddTaskCreated) Error() string {
 
 func (o *AddTaskCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Task)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -94,40 +94,6 @@ func (o *AddTaskInternalServerError) readResponse(response runtime.ClientRespons
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-/*AddTaskCreatedBody add task created body
-swagger:model AddTaskCreatedBody
-*/
-type AddTaskCreatedBody struct {
-
-	// tasks
-	// Required: true
-	Tasks models.Tasks `json:"Tasks"`
-}
-
-// Validate validates this add task created body
-func (o *AddTaskCreatedBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := o.validateTasks(formats); err != nil {
-		// prop
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (o *AddTaskCreatedBody) validateTasks(formats strfmt.Registry) error {
-
-	if err := validate.Required("addTaskCreated"+"."+"tasks", "body", o.Tasks); err != nil {
 		return err
 	}
 

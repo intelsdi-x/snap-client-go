@@ -38,5 +38,5 @@ check:
 	$(MAKE) test
 all:
 	bash -c "./scripts/build.sh"
-swagger-client:
+swagger:
 	bash -c "./scripts/swagger-gen.sh"

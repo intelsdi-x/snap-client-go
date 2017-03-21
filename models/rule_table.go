@@ -15,25 +15,25 @@ import (
 type RuleTable struct {
 
 	// default
-	Default interface{} `json:"Default,omitempty"`
+	Default interface{} `json:"default,omitempty"`
 
 	// maximum
-	Maximum interface{} `json:"Maximum,omitempty"`
+	Maximum interface{} `json:"maximum,omitempty"`
 
 	// minimum
-	Minimum interface{} `json:"Minimum,omitempty"`
+	Minimum interface{} `json:"minimum,omitempty"`
 
 	// name
 	// Required: true
-	Name *string `json:"Name"`
+	Name *string `json:"name"`
 
 	// required
 	// Required: true
-	Required *bool `json:"Required"`
+	Required *bool `json:"required"`
 
 	// type
 	// Required: true
-	Type *string `json:"Type"`
+	Type *string `json:"type"`
 }
 
 // Validate validates this rule table

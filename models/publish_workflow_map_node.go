@@ -16,17 +16,17 @@ type PublishWorkflowMapNode struct {
 
 	// config
 	// Required: true
-	Config map[string]interface{} `json:"Config"`
+	Config map[string]interface{} `json:"config"`
 
-	// name
+	// plugin name
 	// Required: true
-	Name *string `json:"Name"`
+	PluginName *string `json:"plugin_name"`
+
+	// plugin version
+	PluginVersion int64 `json:"plugin_version,omitempty"`
 
 	// target
-	Target string `json:"Target,omitempty"`
-
-	// version
-	Version int64 `json:"Version,omitempty"`
+	Target string `json:"target,omitempty"`
 }
 
 // Validate validates this publish workflow map node
@@ -38,7 +38,7 @@ func (m *PublishWorkflowMapNode) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateName(formats); err != nil {
+	if err := m.validatePluginName(formats); err != nil {
 		// prop
 		res = append(res, err)
 	}
@@ -58,9 +58,9 @@ func (m *PublishWorkflowMapNode) validateConfig(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *PublishWorkflowMapNode) validateName(formats strfmt.Registry) error {
+func (m *PublishWorkflowMapNode) validatePluginName(formats strfmt.Registry) error {
 
-	if err := validate.Required("name", "body", m.Name); err != nil {
+	if err := validate.Required("plugin_name", "body", m.PluginName); err != nil {
 		return err
 	}
 

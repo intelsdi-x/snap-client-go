@@ -1,7 +1,8 @@
 version: '2'
 services:
   main:
-    image: candysmurfhub/snap-client-go-test:latest
+    build: ./docker
+    # image: candysmurfhub/snap-client-go-test:latest
     container_name: snap-client-go-test
     environment:
       SNAP_VERSION: 1.1.0

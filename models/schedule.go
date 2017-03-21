@@ -18,17 +18,17 @@ type Schedule struct {
 
 	// interval
 	// Required: true
-	Interval *string `json:"Interval"`
+	Interval *string `json:"interval"`
 
 	// start timestamp
-	StartTimestamp interface{} `json:"StartTimestamp,omitempty"`
+	StartTimestamp interface{} `json:"start_timestamp,omitempty"`
 
 	// stop timestamp
-	StopTimestamp interface{} `json:"StopTimestamp,omitempty"`
+	StopTimestamp interface{} `json:"stop_timestamp,omitempty"`
 
 	// type
 	// Required: true
-	Type *string `json:"Type"`
+	Type *string `json:"type"`
 }
 
 // Validate validates this schedule
@@ -64,7 +64,7 @@ var scheduleTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["simple"," windowed"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["simple"," windowed"," cron"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -77,6 +77,8 @@ const (
 	ScheduleTypeSimple string = "simple"
 	// ScheduleTypeNrWindowed captures enum value " windowed"
 	ScheduleTypeNrWindowed string = " windowed"
+	// ScheduleTypeNrCron captures enum value " cron"
+	ScheduleTypeNrCron string = " cron"
 )
 
 // prop value enum

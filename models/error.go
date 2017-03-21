@@ -14,10 +14,10 @@ import (
 type Error struct {
 
 	// fields
-	Fields map[string]string `json:"Fields,omitempty"`
+	Fields map[string]string `json:"fields,omitempty"`
 
 	// message
-	Message string `json:"Message,omitempty"`
+	Message string `json:"message,omitempty"`
 }
 
 // Validate validates this error

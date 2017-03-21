@@ -14,7 +14,7 @@ import (
 type MetricInfo struct {
 
 	// version
-	Version int64 `json:"Version_,omitempty"`
+	Version int64 `json:"version,omitempty"`
 }
 
 // Validate validates this metric info

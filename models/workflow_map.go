@@ -16,7 +16,7 @@ type WorkflowMap struct {
 
 	// collect
 	// Required: true
-	Collect *CollectWorkflowMapNode `json:"Collect"`
+	Collect *CollectWorkflowMapNode `json:"collect"`
 }
 
 // Validate validates this workflow map

@@ -18,32 +18,32 @@ import (
 type Metric struct {
 
 	// description
-	Description string `json:"Description,omitempty"`
+	Description string `json:"description,omitempty"`
 
 	// Dynamic boolean representation if the metric has dynamic element.
-	Dynamic bool `json:"Dynamic,omitempty"`
+	Dynamic bool `json:"dynamic,omitempty"`
 
 	// DynamicElements slice of dynamic elements.
-	DynamicElements []*DynamicElement `json:"DynamicElements"`
+	DynamicElements []*DynamicElement `json:"dynamic_elements"`
 
 	// href
-	Href string `json:"Href,omitempty"`
+	Href string `json:"href,omitempty"`
 
 	// last advertised timestamp
-	LastAdvertisedTimestamp int64 `json:"LastAdvertisedTimestamp,omitempty"`
+	LastAdvertisedTimestamp int64 `json:"last_advertised_timestamp,omitempty"`
 
 	// namespace
 	// Required: true
-	Namespace *string `json:"Namespace"`
+	Namespace *string `json:"namespace"`
 
 	// Policy a slice of metric rules.
-	Policy PolicyTableSlice `json:"Policy"`
+	Policy PolicyTableSlice `json:"policy"`
 
 	// unit
-	Unit string `json:"Unit,omitempty"`
+	Unit string `json:"unit,omitempty"`
 
 	// version
-	Version int64 `json:"Version,omitempty"`
+	Version int64 `json:"version,omitempty"`
 }
 
 // Validate validates this metric

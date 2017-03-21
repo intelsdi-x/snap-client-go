@@ -71,7 +71,7 @@ type GetTasksOKBody struct {
 
 	// tasks
 	// Required: true
-	Tasks models.Tasks `json:"Tasks"`
+	Tasks models.Tasks `json:"tasks"`
 }
 
 // Validate validates this get tasks o k body

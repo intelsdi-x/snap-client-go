@@ -15,28 +15,28 @@ import (
 type Plugin struct {
 
 	// config policy
-	ConfigPolicy []PolicyTable `json:"ConfigPolicy"`
+	ConfigPolicy []PolicyTable `json:"config_policy"`
 
 	// href
-	Href string `json:"Href,omitempty"`
+	Href string `json:"href,omitempty"`
 
 	// loaded timestamp
-	LoadedTimestamp int64 `json:"LoadedTimestamp,omitempty"`
+	LoadedTimestamp int64 `json:"loaded_timestamp,omitempty"`
 
 	// name
-	Name string `json:"Name,omitempty"`
+	Name string `json:"name,omitempty"`
 
 	// signed
-	Signed bool `json:"Signed,omitempty"`
+	Signed bool `json:"signed,omitempty"`
 
 	// status
-	Status string `json:"Status,omitempty"`
+	Status string `json:"status,omitempty"`
 
 	// type
-	Type string `json:"Type,omitempty"`
+	Type string `json:"type,omitempty"`
 
 	// version
-	Version int64 `json:"Version,omitempty"`
+	Version int64 `json:"version,omitempty"`
 }
 
 // Validate validates this plugin

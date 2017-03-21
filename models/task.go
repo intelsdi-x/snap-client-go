@@ -7,7 +7,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/go-openapi/errors"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Task Task represents Snap task definition.
@@ -15,54 +15,59 @@ import (
 type Task struct {
 
 	// creation timestamp
-	CreationTimestamp int64 `json:"CreationTimestamp,omitempty"`
+	CreationTimestamp int64 `json:"creation_timestamp,omitempty"`
 
 	// deadline
-	Deadline string `json:"Deadline,omitempty"`
+	Deadline string `json:"deadline,omitempty"`
 
 	// failed count
-	FailedCount int64 `json:"FailedCount,omitempty"`
+	FailedCount int64 `json:"failed_count,omitempty"`
 
 	// hit count
-	HitCount int64 `json:"HitCount,omitempty"`
+	HitCount int64 `json:"hit_count,omitempty"`
 
 	// href
-	Href string `json:"Href,omitempty"`
+	Href string `json:"href,omitempty"`
 
-	// ID
-	// Unique: true
-	ID string `json:"ID,omitempty"`
+	// id
+	ID string `json:"id,omitempty"`
 
 	// last failure message
-	LastFailureMessage string `json:"LastFailureMessage,omitempty"`
+	LastFailureMessage string `json:"last_failure_message,omitempty"`
 
 	// last run timestamp
-	LastRunTimestamp int64 `json:"LastRunTimestamp,omitempty"`
+	LastRunTimestamp int64 `json:"last_run_timestamp,omitempty"`
+
+	// max failures
+	MaxFailures int64 `json:"max-failures,omitempty"`
 
 	// miss count
-	MissCount int64 `json:"MissCount,omitempty"`
+	MissCount int64 `json:"miss_count,omitempty"`
 
 	// name
-	Name string `json:"Name,omitempty"`
+	Name string `json:"name,omitempty"`
 
 	// schedule
-	Schedule *Schedule `json:"Schedule,omitempty"`
+	// Required: true
+	Schedule *Schedule `json:"schedule"`
+
+	// start
+	Start bool `json:"start,omitempty"`
 
 	// state
-	State string `json:"State,omitempty"`
+	State string `json:"state,omitempty"`
+
+	// version
+	Version int64 `json:"version,omitempty"`
 
 	// workflow
-	Workflow *WorkflowMap `json:"Workflow,omitempty"`
+	// Required: true
+	Workflow *WorkflowMap `json:"workflow"`
 }
 
 // Validate validates this task
 func (m *Task) Validate(formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.validateID(formats); err != nil {
-		// prop
-		res = append(res, err)
-	}
 
 	if err := m.validateSchedule(formats); err != nil {
 		// prop
@@ -80,19 +85,10 @@ func (m *Task) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Task) validateID(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ID) { // not required
-		return nil
-	}
-
-	return nil
-}
-
 func (m *Task) validateSchedule(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Schedule) { // not required
-		return nil
+	if err := validate.Required("schedule", "body", m.Schedule); err != nil {
+		return err
 	}
 
 	if m.Schedule != nil {
@@ -110,8 +106,8 @@ func (m *Task) validateSchedule(formats strfmt.Registry) error {
 
 func (m *Task) validateWorkflow(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Workflow) { // not required
-		return nil
+	if err := validate.Required("workflow", "body", m.Workflow); err != nil {
+		return err
 	}
 
 	if m.Workflow != nil {
