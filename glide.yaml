@@ -1,0 +1,16 @@
+package: github.com/intelsdi-x/snap-client-go
+import:
+- package: github.com/go-openapi/errors
+- package: github.com/go-openapi/runtime
+  subpackages:
+  - client
+- package: github.com/go-openapi/strfmt
+- package: github.com/go-openapi/swag
+- package: github.com/go-openapi/validate
+- package: github.com/intelsdi-x/snap
+  subpackages:
+  - client/operations
+  - models
+- package: golang.org/x/net
+  subpackages:
+  - context
