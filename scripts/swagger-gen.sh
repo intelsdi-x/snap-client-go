@@ -31,7 +31,7 @@ if [ -f "${__file}" ]
 then
     rm -rf ${__dir}/../client
     rm -rf ${__dir}/../models
-    swagger generate client -f ${__file} -A snap -a snap
+    swagger generate client -f ${__file} -A snap
 else
     msg="${__file} not found.
         please run the following command to get Snap in your GOPATH.

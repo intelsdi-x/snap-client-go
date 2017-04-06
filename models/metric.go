@@ -36,7 +36,7 @@ type Metric struct {
 	// Required: true
 	Namespace *string `json:"namespace"`
 
-	// Policy a slice of metric rules.
+	// policy
 	Policy PolicyTableSlice `json:"policy"`
 
 	// unit

@@ -26,7 +26,7 @@ import (
 	"testing"
 
 	"github.com/intelsdi-x/snap-client-go/client"
-	"github.com/intelsdi-x/snap-client-go/client/snap"
+	"github.com/intelsdi-x/snap-client-go/client/plugins"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -42,30 +42,30 @@ func TestGetMetrics(t *testing.T) {
 
 	Convey("Testing GetMetrics", t, func() {
 		Convey("Test get a list of metrics", func() {
-			params := snap.NewGetMetricsParams()
+			params := plugins.NewGetMetricsParams()
 
-			resp, err := c.Snap.GetMetrics(params)
+			resp, err := c.Plugins.GetMetrics(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(len(resp.Payload.Metrics), ShouldBeGreaterThan, 0)
 		})
 
 		Convey("Test get a metric for all its versions", func() {
-			params := snap.NewGetMetricsParams()
+			params := plugins.NewGetMetricsParams()
 			params.SetNs(&ns)
 
-			resp, err := c.Snap.GetMetrics(params)
+			resp, err := c.Plugins.GetMetrics(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(len(resp.Payload.Metrics), ShouldBeGreaterThan, 0)
 		})
 
 		Convey("Test get a metric", func() {
-			params := snap.NewGetMetricsParams()
+			params := plugins.NewGetMetricsParams()
 			params.SetNs(&ns)
 			params.SetVer(&ver)
 
-			resp, err := c.Snap.GetMetrics(params)
+			resp, err := c.Plugins.GetMetrics(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(len(resp.Payload.Metrics), ShouldBeGreaterThan, 0)
