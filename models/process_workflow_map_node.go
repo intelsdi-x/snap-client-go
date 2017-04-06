@@ -17,7 +17,7 @@ import (
 // swagger:model ProcessWorkflowMapNode
 type ProcessWorkflowMapNode struct {
 
-	// TODO processor config
+	// config
 	Config map[string]interface{} `json:"config,omitempty"`
 
 	// plugin name

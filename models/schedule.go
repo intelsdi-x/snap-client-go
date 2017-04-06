@@ -67,7 +67,7 @@ var scheduleTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["simple"," windowed"," cron"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["simple"," windowed"," streaming"," cron"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -80,6 +80,8 @@ const (
 	ScheduleTypeSimple string = "simple"
 	// ScheduleTypeNrWindowed captures enum value " windowed"
 	ScheduleTypeNrWindowed string = " windowed"
+	// ScheduleTypeNrStreaming captures enum value " streaming"
+	ScheduleTypeNrStreaming string = " streaming"
 	// ScheduleTypeNrCron captures enum value " cron"
 	ScheduleTypeNrCron string = " cron"
 )

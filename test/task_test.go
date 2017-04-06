@@ -26,7 +26,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/intelsdi-x/snap-client-go/client/snap"
+	"github.com/intelsdi-x/snap-client-go/client/tasks"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -35,10 +35,10 @@ func TestAddTask(t *testing.T) {
 
 	Convey("Testing AddTask", t, func() {
 		Convey("Test add a task", func() {
-			params := snap.NewAddTaskParams()
+			params := tasks.NewAddTaskParams()
 			params.SetTask(`{"version":1,"schedule":{"type":"simple","interval":"15s"},"workflow":{"collect":{"metrics":{"/intel/mock/foo":{},"/intel/mock/bar":{},"/intel/mock/*/baz":{}},"config":{"/intel/mock":{"user":"root","password":"secret"}},"process":null,"publish":[{"plugin_name":"file","config":{"file":"/tmp/collected_swagger"}}]}}}`)
 
-			resp, err := c.Snap.AddTask(params)
+			resp, err := c.Tasks.AddTask(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 		})
@@ -51,30 +51,30 @@ func TestTask(t *testing.T) {
 	var id string
 	Convey("Testing Tasks", t, func() {
 		Convey("Test get a list of tasks", func() {
-			params := snap.NewGetTasksParams()
+			params := tasks.NewGetTasksParams()
 
-			resp, err := c.Snap.GetTasks(params)
+			resp, err := c.Tasks.GetTasks(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(len(resp.Payload.Tasks), ShouldBeGreaterThan, 0)
 			id = resp.Payload.Tasks[0].ID
 
 			Convey("Test get a task", func() {
-				params := snap.NewGetTaskParams()
+				params := tasks.NewGetTaskParams()
 				params.SetID(id)
 
-				resp, err := c.Snap.GetTask(params)
+				resp, err := c.Tasks.GetTask(params)
 				So(err, ShouldBeNil)
 				So(resp.Payload, ShouldNotBeNil)
 				So(resp.Payload.ID, ShouldEqual, id)
 			})
 
 			Convey("Test start a task", func() {
-				params := snap.NewUpdateTaskStateParams()
+				params := tasks.NewUpdateTaskStateParams()
 				params.SetID(id)
 				params.SetAction("start")
 
-				resp, err := c.Snap.UpdateTaskState(params)
+				resp, err := c.Tasks.UpdateTaskState(params)
 				So(err, ShouldBeNil)
 				So(resp, ShouldNotBeNil)
 			})
@@ -86,20 +86,20 @@ func TestTask(t *testing.T) {
 			})
 
 			Convey("Test stop a task", func() {
-				params := snap.NewUpdateTaskStateParams()
+				params := tasks.NewUpdateTaskStateParams()
 				params.SetID(id)
 				params.SetAction("stop")
 
-				resp, err := c.Snap.UpdateTaskState(params)
+				resp, err := c.Tasks.UpdateTaskState(params)
 				So(err, ShouldBeNil)
 				So(resp, ShouldNotBeNil)
 			})
 
 			Convey("Test delete a task", func() {
-				params := snap.NewRemoveTaskParams()
+				params := tasks.NewRemoveTaskParams()
 				params.SetID(id)
 
-				_, err := c.Snap.RemoveTask(params)
+				_, err := c.Tasks.RemoveTask(params)
 				So(err, ShouldBeNil)
 			})
 		})

@@ -25,7 +25,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/intelsdi-x/snap-client-go/client/snap"
+	"github.com/intelsdi-x/snap-client-go/client/plugins"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -34,31 +34,31 @@ func TestGetPlugins(t *testing.T) {
 
 	Convey("Testing GetPlugins", t, func() {
 		Convey("Test get a list of plugins", func() {
-			params := snap.NewGetPluginsParams()
+			params := plugins.NewGetPluginsParams()
 
-			resp, err := c.Snap.GetPlugins(params)
+			resp, err := c.Plugins.GetPlugins(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload.Plugins, ShouldNotBeNil)
 		})
 
 		Convey("Test get a giving plugin", func() {
-			params := snap.NewGetPluginParams()
+			params := plugins.NewGetPluginParams()
 			params.SetPname("mock")
 			params.SetPtype("collector")
 			params.SetPversion(int64(2))
 
-			resp, err := c.Snap.GetPlugin(params)
+			resp, err := c.Plugins.GetPlugin(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload.Name, ShouldEqual, "mock")
 		})
 
 		Convey("Test get a non-existing plugin", func() {
-			params := snap.NewGetPluginParams()
+			params := plugins.NewGetPluginParams()
 			params.SetPname("mock1")
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			resp, err := c.Snap.GetPlugin(params)
+			resp, err := c.Plugins.GetPlugin(params)
 			So(err, ShouldNotBeNil)
 			So(resp, ShouldBeNil)
 		})
@@ -70,23 +70,23 @@ func TestUnloadPlugin(t *testing.T) {
 
 	Convey("Testing Unload a plugin", t, func() {
 		Convey("Test unload an existing plugin", func() {
-			params := snap.NewUnloadPluginParams()
+			params := plugins.NewUnloadPluginParams()
 			params.SetPname("mock")
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			resp, err := c.Snap.UnloadPlugin(params)
+			resp, err := c.Plugins.UnloadPlugin(params)
 			So(err, ShouldBeNil)
 			So(resp, ShouldNotBeNil)
 		})
 
 		Convey("Test unload a non-existing plugin", func() {
-			params := snap.NewUnloadPluginParams()
+			params := plugins.NewUnloadPluginParams()
 			params.SetPname("mock3")
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			resp, err := c.Snap.UnloadPlugin(params)
+			resp, err := c.Plugins.UnloadPlugin(params)
 			So(err, ShouldNotBeNil)
 			So(resp, ShouldBeNil)
 		})
@@ -98,7 +98,7 @@ func TestLoadPlugin(t *testing.T) {
 
 	Convey("Testing load a plugin", t, func() {
 		Convey("Test load an existing plugin", func() {
-			params := snap.NewLoadPluginParams()
+			params := plugins.NewLoadPluginParams()
 			f, err := os.Open("/tmp/snap-plugin-collector-mock1")
 			if err != nil {
 				t.Fatalf("\nNo plugin to load: %v", err)
@@ -106,7 +106,7 @@ func TestLoadPlugin(t *testing.T) {
 			defer f.Close()
 
 			params.SetPluginData(f)
-			resp, err := c.Snap.LoadPlugin(params)
+			resp, err := c.Plugins.LoadPlugin(params)
 			So(err, ShouldBeNil)
 			So(resp.Payload.Name, ShouldEqual, "mock")
 			So(resp.Payload.Version, ShouldEqual, 1)

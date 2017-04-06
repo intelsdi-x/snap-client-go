@@ -25,7 +25,7 @@ import (
 	"testing"
 
 	"github.com/intelsdi-x/snap-client-go/client"
-	"github.com/intelsdi-x/snap-client-go/client/snap"
+	"github.com/intelsdi-x/snap-client-go/client/plugins"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -42,7 +42,7 @@ func TestClient(t *testing.T) {
 		})
 		Convey("Test get a plugin", func() {
 			c := client.NewHTTPClient(nil)
-			_, err := c.Snap.GetPlugin(snap.NewGetPluginParams())
+			_, err := c.Plugins.GetPlugin(plugins.NewGetPluginParams())
 			So(err, ShouldNotBeNil)
 		})
 	})
