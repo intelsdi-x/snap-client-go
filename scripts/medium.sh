@@ -34,7 +34,7 @@ if [[ $EXIT_ON_ERROR > 0 ]]; then
     exit 1
 fi
 
-docker-compose -f test/docker-compose.yml up --build -d
+docker-compose -f tests/docker/docker-compose.yml up --build -d
 
 DOCKER_HOST=${DOCKER_HOST-}
 if [[ -z "${DOCKER_HOST}" ]]; then
@@ -60,4 +60,4 @@ UNIT_TEST="go_test"
 test_unit
 
 echo "Cleanup container"
-docker-compose -f test/docker-compose.yml down
+docker-compose -f tests/docker/docker-compose.yml down

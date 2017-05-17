@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// StreamedMetrics StreamedMetrics defines ann array of streamed metrics.
+// StreamedMetrics StreamedMetrics defines a slice of streamed metrics.
 // swagger:model StreamedMetrics
 type StreamedMetrics []*StreamedMetric
 

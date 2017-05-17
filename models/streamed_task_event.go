@@ -7,20 +7,21 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/swag"
 )
 
 // StreamedTaskEvent StreamedTaskEvent defines the task watching data type.
 // swagger:model StreamedTaskEvent
 type StreamedTaskEvent struct {
 
-	// event
-	Event StreamedMetrics `json:"event"`
+	// event type
+	EventType string `json:"type,omitempty"`
 
 	// message
 	Message string `json:"message,omitempty"`
 
-	// type
-	Type string `json:"type,omitempty"`
+	// event
+	Event StreamedMetrics `json:"event"`
 }
 
 // Validate validates this streamed task event
@@ -30,5 +31,23 @@ func (m *StreamedTaskEvent) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *StreamedTaskEvent) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *StreamedTaskEvent) UnmarshalBinary(b []byte) error {
+	var res StreamedTaskEvent
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
 	return nil
 }

@@ -17,7 +17,7 @@ import (
 // swagger:model ProcessWorkflowMapNode
 type ProcessWorkflowMapNode struct {
 
-	// TODO processor config
+	// Config the configuration of a processor.
 	Config map[string]interface{} `json:"config,omitempty"`
 
 	// plugin name
@@ -122,5 +122,23 @@ func (m *ProcessWorkflowMapNode) validatePublish(formats strfmt.Registry) error 
 
 	}
 
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *ProcessWorkflowMapNode) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *ProcessWorkflowMapNode) UnmarshalBinary(b []byte) error {
+	var res ProcessWorkflowMapNode
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
 	return nil
 }

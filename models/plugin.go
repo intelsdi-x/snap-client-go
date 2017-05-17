@@ -17,13 +17,13 @@ type Plugin struct {
 	// config policy
 	ConfigPolicy []PolicyTable `json:"config_policy"`
 
-	// hitcount
-	Hitcount int64 `json:"hitcount,omitempty"`
+	// hit count
+	HitCount int64 `json:"hitcount,omitempty"`
 
 	// href
 	Href string `json:"href,omitempty"`
 
-	// id
+	// ID
 	ID uint32 `json:"id,omitempty"`
 
 	// last hit timestamp
@@ -72,5 +72,23 @@ func (m *Plugin) validateConfigPolicy(formats strfmt.Registry) error {
 		return nil
 	}
 
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *Plugin) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *Plugin) UnmarshalBinary(b []byte) error {
+	var res Plugin
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
 	return nil
 }

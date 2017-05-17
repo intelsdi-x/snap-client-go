@@ -7,10 +7,11 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/swag"
 )
 
-// MetricInfo MetricInfo defines metric version.
-// swagger:model MetricInfo
+// MetricInfo metric info
+// swagger:model metricInfo
 type MetricInfo struct {
 
 	// version
@@ -24,5 +25,23 @@ func (m *MetricInfo) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *MetricInfo) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *MetricInfo) UnmarshalBinary(b []byte) error {
+	var res MetricInfo
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
 	return nil
 }
