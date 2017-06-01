@@ -9,8 +9,6 @@ You can browse and test Snap APIs interactively by leveraging tools:
 * [go-swagger](https://github.com/go-swagger/go-swagger)
   * Run the following command at the root of [Snap](https://github.com/intelsdi-x/snap) repo:
     > swagger serve swagger.json --host=127.0.0.1
-* [swagger-ui](https://github.com/swagger-api/swagger-ui)
-* [apistudio.io](http://apistudio.io/)
 
 :fire: Package **`client`** and **`models`** inside this repo require no modification at all.
 
@@ -28,13 +26,13 @@ You may create a default client or a custom client.
 
 ### Default client
 
-```sh
+```go
   c := client.NewHTTPClient(nil)
 ```
 
 ### Custom client
 
-```sh
+```go
   c := client.NewHTTPClientWithConfig(nil, &client.TransportConfig{
 		Host:     "http://example.com:80",
 		BasePath: "/v2",
@@ -48,171 +46,170 @@ For API operations, simply do following with appropriate parameters. Let's assum
 
 ### Get plugins
 
-```sh
-getPlugins, err := c.Snap.GetPlugins(snap.NewGetPluginsParams())
+```go
+getPlugins, err := c.Plugins.GetPlugins(snap.NewGetPluginsParams())
 ```
 
 ### Get a plugin
 
-```sh
-params := snap.NewGetPluginParams()
+```go
+params := plugins.NewGetPluginParams()
 params.SetPtype("collector")
 params.SetPname("mock")
 params.SetPversion(int64(1))
 
-getPlugin, err := c.Snap.GetPlugin(params)
+getPlugin, err := c.Plugins.GetPlugin(params)
 ```
 
 ### Load a plugin
 
-```sh
-params := snap.NewLoadPluginParams()
+```go
+params := plugins.NewLoadPluginParams()
 params.SetPluginData(<*os.file>)
 
-loadPlugin, err := c.Snap.LoadPlugin(params)
+loadPlugin, err := c.Plugins.LoadPlugin(params)
 ```
 
 ### Unload a plugin
 
-```sh
-params := snap.NewUnloadPluginParams()
+```go
+params := plugins.NewUnloadPluginParams()
 params.SetPtype("collector")
 params.SetPname("mock")
 params.SetPversion(int64(1))
 
-unloadPlugin, err := c.Snap.UnloadPlugin(params)
+unloadPlugin, err := c.Plugins.UnloadPlugin(params)
 ```
 
 ### Get a plugin config
 
-```sh
-params := snap.NewGetPluginConfigItemParams()
+```go
+params := plugins.NewGetPluginConfigItemParams()
 params.SetPname("mock")
 params.SetPtype("collector")
 params.SetPversion(int64(1))
 
-getPluginConfig, err := c.Snap.GetPluginConfigItem(params)
+getPluginConfig, err := c.Plugins.GetPluginConfigItem(params)
 ```
 
 ### Update a plugin config
 
-```sh
+```go
 cfg := `{"user":"jean","someint":1234567,"somefloat":3.1418,"somebool":false}`
 
-params := snap.NewSetPluginConfigItemParams()
+params := plugins.NewSetPluginConfigItemParams()
 params.SetPname("mock")
 params.SetPtype("collector")
 params.SetPversion(int64(1))
 params.SetConfig(&cfg)
 
-setPluginConfig, err := c.Snap.SetPluginConfigItem(params)
+setPluginConfig, err := c.Plugins.SetPluginConfigItem(params)
 ```
 
 ### Delete a plugin config
 
-```sh
-params := snap.NewDeletePluginConfigItemParams()
+```go
+params := plugins.NewDeletePluginConfigItemParams()
 params.SetPname("mock")
 params.SetPtype("collector")
 params.SetPversion(int64(1))
 params.SetConfig([]string{"somefloat", "someint"})
 
-deletePluginConfig, err := c.Snap.DeletePluginConfigItem(params)
+deletePluginConfig, err := c.Plugins.DeletePluginConfigItem(params)
 ```
 
 ### Get metrics
 
-```sh
-params := snap.NewGetMetricsParams()
-
-getMetrics, err := c.Snap.GetMetrics(params)
+```go
+params := plugins.NewGetMetricsParams()
+getMetrics, err := c.Plugins.GetMetrics(params)
 ```
 
 ### Get metrics giving a namespace
 
-```sh
+```go
 ns := "/intel/mock/bar"
-params := snap.NewGetMetricsParams()
+params := plugins.NewGetMetricsParams()
 params.SetNs(&ns)
 
-getMetrics, err := c.Snap.GetMetrics(params)
+getMetrics, err := c.Plugins.GetMetrics(params)
 ```
 
 ### Get a metric
 
-```sh
+```go
 ns := "/intel/mock/bar"
 ver := int64(1)
-params := snap.NewGetMetricsParams()
+params := plugins.NewGetMetricsParams()
 params.SetNs(&ns)
 params.SetVer(&ver)
 
-getMetric, err := c.Snap.GetMetrics(params)
+getMetric, err := c.Plugins.GetMetrics(params)
 ```
 
 ### Get tasks
 
-```sh
-params := snap.NewGetTasksParams()
+```go
+params := tasks.NewGetTasksParams()
 
-getTasks, err := c.Snap.GetTasks(params)
+getTasks, err := c.Tasks.GetTasks(params)
 ```
 
 ### Get a task
 
-```sh
-params := snap.NewGetTaskParams()
+```go
+params := tasks.NewGetTaskParams()
 params.SetID(id)
 
-getTask, err := c.Snap.GetTask(params)
+getTask, err := c.Tasks.GetTask(params)
 ```
 
 ### Create a task
 
-```sh
-params := snap.NewAddTaskParams()
+```go
+params := tasks.NewAddTaskParams()
 params.SetTask(<task manifest> || <workflow manifest>)
 
-createTask, err := c.Snap.AddTask(params)
+createTask, err := c.Tasks.AddTask(params)
 ```
 
 ### Start a task
 
-```sh
-params := snap.NewUpdateTaskStateParams()
+```go
+params := tasks.NewUpdateTaskStateParams()
 params.SetID(<task id>)
 params.SetAction("start")
 
-startTask, err := c.Snap.UpdateTaskState(params)
+startTask, err := c.Tasks.UpdateTaskState(params)
 ```
 
 ### Stop a task
 
-```sh
-params := snap.NewUpdateTaskStateParams()
+```go
+params := tasks.NewUpdateTaskStateParams()
 params.SetID(<task id>)
 params.SetAction("stop")
 
-stopTask, err := c.Snap.UpdateTaskState(params)
+stopTask, err := c.Tasks.UpdateTaskState(params)
 ```
 
 ### Enable a task
 
-```sh
-params := snap.NewUpdateTaskStateParams()
+```go
+params := tasks.NewUpdateTaskStateParams()
 params.SetID(<task id>)
 params.SetAction("enable")
 
-enableTask, err := c.Snap.UpdateTaskState(params)
+enableTask, err := c.Tasks.UpdateTaskState(params)
 ```
 
 ### Remove a task
 
-```sh
-params := snap.NewRemoveTaskParams()
+```go
+params := tasks.NewRemoveTaskParams()
 params.SetID(<task id>)
 
-removeTask, err := c.Snap.RemoveTask(params)
+removeTask, err := c.Tasks.RemoveTask(params)
 ```
 
 ## Running tests

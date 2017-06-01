@@ -7,7 +7,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/go-openapi/errors"
-	"github.com/go-openapi/validate"
+	"github.com/go-openapi/swag"
 )
 
 // Task Task represents Snap task definition.
@@ -29,7 +29,7 @@ type Task struct {
 	// href
 	Href string `json:"href,omitempty"`
 
-	// id
+	// ID
 	ID string `json:"id,omitempty"`
 
 	// last failure message
@@ -47,22 +47,20 @@ type Task struct {
 	// name
 	Name string `json:"name,omitempty"`
 
-	// schedule
-	// Required: true
-	Schedule *Schedule `json:"schedule"`
-
 	// start
 	Start bool `json:"start,omitempty"`
 
-	// state
-	State string `json:"state,omitempty"`
+	// task state
+	TaskState string `json:"task_state,omitempty"`
 
 	// version
 	Version int64 `json:"version,omitempty"`
 
+	// schedule
+	Schedule *Schedule `json:"schedule,omitempty"`
+
 	// workflow
-	// Required: true
-	Workflow *WorkflowMap `json:"workflow"`
+	Workflow *WorkflowMap `json:"workflow,omitempty"`
 }
 
 // Validate validates this task
@@ -87,8 +85,8 @@ func (m *Task) Validate(formats strfmt.Registry) error {
 
 func (m *Task) validateSchedule(formats strfmt.Registry) error {
 
-	if err := validate.Required("schedule", "body", m.Schedule); err != nil {
-		return err
+	if swag.IsZero(m.Schedule) { // not required
+		return nil
 	}
 
 	if m.Schedule != nil {
@@ -106,8 +104,8 @@ func (m *Task) validateSchedule(formats strfmt.Registry) error {
 
 func (m *Task) validateWorkflow(formats strfmt.Registry) error {
 
-	if err := validate.Required("workflow", "body", m.Workflow); err != nil {
-		return err
+	if swag.IsZero(m.Workflow) { // not required
+		return nil
 	}
 
 	if m.Workflow != nil {
@@ -120,5 +118,23 @@ func (m *Task) validateWorkflow(formats strfmt.Registry) error {
 		}
 	}
 
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *Task) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *Task) UnmarshalBinary(b []byte) error {
+	var res Task
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
 	return nil
 }

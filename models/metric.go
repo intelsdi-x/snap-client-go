@@ -23,7 +23,7 @@ type Metric struct {
 	// Dynamic boolean representation if the metric has dynamic element.
 	Dynamic bool `json:"dynamic,omitempty"`
 
-	// DynamicElements slice of dynamic elements.
+	// DynamicElements a slice of dynamic elements.
 	DynamicElements []*DynamicElement `json:"dynamic_elements"`
 
 	// href
@@ -36,14 +36,14 @@ type Metric struct {
 	// Required: true
 	Namespace *string `json:"namespace"`
 
-	// Policy a slice of metric rules.
-	Policy PolicyTableSlice `json:"policy"`
-
 	// unit
 	Unit string `json:"unit,omitempty"`
 
 	// version
 	Version int64 `json:"version,omitempty"`
+
+	// policy
+	Policy PolicyTableSlice `json:"policy"`
 }
 
 // Validate validates this metric
@@ -99,5 +99,23 @@ func (m *Metric) validateNamespace(formats strfmt.Registry) error {
 		return err
 	}
 
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *Metric) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *Metric) UnmarshalBinary(b []byte) error {
+	var res Metric
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
 	return nil
 }

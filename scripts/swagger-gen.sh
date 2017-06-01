@@ -19,10 +19,9 @@
 
 set -e
 set -u
-set -o pipefail
 
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-__file="${__dir}/../../snap/swagger.json"
+__file="${__dir}/../vendor/github.com/intelsdi-x/snap/swagger.json"
 
 # shellcheck source=scripts/common.sh
 . "${__dir}/common.sh"

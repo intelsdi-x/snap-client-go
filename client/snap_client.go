@@ -9,7 +9,8 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	"github.com/intelsdi-x/snap-client-go/client/snap"
+	"github.com/intelsdi-x/snap-client-go/client/plugins"
+	"github.com/intelsdi-x/snap-client-go/client/tasks"
 )
 
 // Default snap HTTP client.
@@ -53,7 +54,9 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *Snap {
 	cli := new(Snap)
 	cli.Transport = transport
 
-	cli.Snap = snap.New(transport, formats)
+	cli.Plugins = plugins.New(transport, formats)
+
+	cli.Tasks = tasks.New(transport, formats)
 
 	return cli
 }
@@ -99,7 +102,9 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 
 // Snap is a client for snap
 type Snap struct {
-	Snap *snap.Client
+	Plugins *plugins.Client
+
+	Tasks *tasks.Client
 
 	Transport runtime.ClientTransport
 }
@@ -108,6 +113,8 @@ type Snap struct {
 func (c *Snap) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
 
-	c.Snap.SetTransport(transport)
+	c.Plugins.SetTransport(transport)
+
+	c.Tasks.SetTransport(transport)
 
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Tasks Tasks a slice of Task
+// Tasks tasks
 // swagger:model Tasks
 type Tasks []*Task
 

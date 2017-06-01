@@ -20,10 +20,9 @@ default:
 	$(MAKE) deps
 	$(MAKE) swagger
 deps:
-	bash -c "./scripts/deps.sh"
+	bash -c "./scripts/deps.sh all"
 test:
-	$(MAKE) test-small
-	$(MAKE) test-medium
+	bash -c "./scripts/test.sh $(TEST_TYPE)"
 test-small:
 	bash -c "./scripts/test.sh small"
 test-medium:

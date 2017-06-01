@@ -7,10 +7,10 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/go-openapi/errors"
-	"github.com/go-openapi/validate"
+	"github.com/go-openapi/swag"
 )
 
-// RuleTable RuleTable defines a named property characteristics.
+// RuleTable rule table
 // swagger:model RuleTable
 type RuleTable struct {
 
@@ -24,36 +24,18 @@ type RuleTable struct {
 	Minimum interface{} `json:"minimum,omitempty"`
 
 	// name
-	// Required: true
-	Name *string `json:"name"`
+	Name string `json:"name,omitempty"`
 
 	// required
-	// Required: true
-	Required *bool `json:"required"`
+	Required bool `json:"required,omitempty"`
 
 	// type
-	// Required: true
-	Type *string `json:"type"`
+	Type string `json:"type,omitempty"`
 }
 
 // Validate validates this rule table
 func (m *RuleTable) Validate(formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.validateName(formats); err != nil {
-		// prop
-		res = append(res, err)
-	}
-
-	if err := m.validateRequired(formats); err != nil {
-		// prop
-		res = append(res, err)
-	}
-
-	if err := m.validateType(formats); err != nil {
-		// prop
-		res = append(res, err)
-	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
@@ -61,29 +43,20 @@ func (m *RuleTable) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *RuleTable) validateName(formats strfmt.Registry) error {
-
-	if err := validate.Required("name", "body", m.Name); err != nil {
-		return err
+// MarshalBinary interface implementation
+func (m *RuleTable) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
 	}
-
-	return nil
+	return swag.WriteJSON(m)
 }
 
-func (m *RuleTable) validateRequired(formats strfmt.Registry) error {
-
-	if err := validate.Required("required", "body", m.Required); err != nil {
+// UnmarshalBinary interface implementation
+func (m *RuleTable) UnmarshalBinary(b []byte) error {
+	var res RuleTable
+	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
-
-	return nil
-}
-
-func (m *RuleTable) validateType(formats strfmt.Registry) error {
-
-	if err := validate.Required("type", "body", m.Type); err != nil {
-		return err
-	}
-
+	*m = res
 	return nil
 }

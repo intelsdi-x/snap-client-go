@@ -7,9 +7,10 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/swag"
 )
 
-// StreamedMetric StreamedMetric defines a streamed metric.
+// StreamedMetric streamed metric
 // swagger:model StreamedMetric
 type StreamedMetric struct {
 
@@ -33,5 +34,23 @@ func (m *StreamedMetric) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *StreamedMetric) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *StreamedMetric) UnmarshalBinary(b []byte) error {
+	var res StreamedMetric
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
 	return nil
 }

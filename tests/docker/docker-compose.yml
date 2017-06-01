@@ -1,0 +1,10 @@
+version: '2'
+services:
+  main:
+    build: ./
+    container_name: snap-client-go-test
+    environment:
+      SNAP_VERSION: latest_build
+      FILE_PUB_PLUGIN_VER: 2
+    ports:
+      - "8181:8181"

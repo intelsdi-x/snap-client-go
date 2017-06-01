@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CollectWorkflowMapNode CollectWorkflowMapNode defines the workflow type.
+// CollectWorkflowMapNode CollectWorkflowMapNode represents Snap workflow data model.
 // swagger:model CollectWorkflowMapNode
 type CollectWorkflowMapNode struct {
 
@@ -119,5 +119,23 @@ func (m *CollectWorkflowMapNode) validatePublish(formats strfmt.Registry) error 
 
 	}
 
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *CollectWorkflowMapNode) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *CollectWorkflowMapNode) UnmarshalBinary(b []byte) error {
+	var res CollectWorkflowMapNode
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
 	return nil
 }
