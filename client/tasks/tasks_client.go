@@ -27,7 +27,7 @@ AddTask adds
 
 A string representation of Snap task manifest is required.
 */
-func (a *Client) AddTask(params *AddTaskParams) (*AddTaskCreated, error) {
+func (a *Client) AddTask(params *AddTaskParams, authInfo runtime.ClientAuthInfoWriter) (*AddTaskCreated, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAddTaskParams()
@@ -42,6 +42,7 @@ func (a *Client) AddTask(params *AddTaskParams) (*AddTaskCreated, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &AddTaskReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -57,7 +58,7 @@ GetTask gets
 
 The task ID is required.
 */
-func (a *Client) GetTask(params *GetTaskParams) (*GetTaskOK, error) {
+func (a *Client) GetTask(params *GetTaskParams, authInfo runtime.ClientAuthInfoWriter) (*GetTaskOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetTaskParams()
@@ -72,6 +73,7 @@ func (a *Client) GetTask(params *GetTaskParams) (*GetTaskOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &GetTaskReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -87,7 +89,7 @@ GetTasks gets all
 
 An empty list returns if no tasks exist.
 */
-func (a *Client) GetTasks(params *GetTasksParams) (*GetTasksOK, error) {
+func (a *Client) GetTasks(params *GetTasksParams, authInfo runtime.ClientAuthInfoWriter) (*GetTasksOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetTasksParams()
@@ -102,6 +104,7 @@ func (a *Client) GetTasks(params *GetTasksParams) (*GetTasksOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &GetTasksReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -117,7 +120,7 @@ RemoveTask removes
 
 The task ID is required.
 */
-func (a *Client) RemoveTask(params *RemoveTaskParams) (*RemoveTaskNoContent, error) {
+func (a *Client) RemoveTask(params *RemoveTaskParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveTaskNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRemoveTaskParams()
@@ -132,6 +135,7 @@ func (a *Client) RemoveTask(params *RemoveTaskParams) (*RemoveTaskNoContent, err
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &RemoveTaskReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -147,7 +151,7 @@ UpdateTaskState enables start stop
 
 The task ID is required.
 */
-func (a *Client) UpdateTaskState(params *UpdateTaskStateParams) (*UpdateTaskStateNoContent, error) {
+func (a *Client) UpdateTaskState(params *UpdateTaskStateParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateTaskStateNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateTaskStateParams()
@@ -162,6 +166,7 @@ func (a *Client) UpdateTaskState(params *UpdateTaskStateParams) (*UpdateTaskStat
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &UpdateTaskStateReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -177,7 +182,7 @@ WatchTask watches
 
 The task ID is required.
 */
-func (a *Client) WatchTask(params *WatchTaskParams) (*WatchTaskOK, error) {
+func (a *Client) WatchTask(params *WatchTaskParams, authInfo runtime.ClientAuthInfoWriter) (*WatchTaskOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewWatchTaskParams()
@@ -192,6 +197,7 @@ func (a *Client) WatchTask(params *WatchTaskParams) (*WatchTaskOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &WatchTaskReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

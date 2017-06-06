@@ -27,7 +27,7 @@ DeletePluginConfigItem deletes config
 
 A minimum of one config key is required for this operation.
 */
-func (a *Client) DeletePluginConfigItem(params *DeletePluginConfigItemParams) (*DeletePluginConfigItemOK, error) {
+func (a *Client) DeletePluginConfigItem(params *DeletePluginConfigItemParams, authInfo runtime.ClientAuthInfoWriter) (*DeletePluginConfigItemOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeletePluginConfigItemParams()
@@ -42,6 +42,7 @@ func (a *Client) DeletePluginConfigItem(params *DeletePluginConfigItemParams) (*
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &DeletePluginConfigItemReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -57,7 +58,7 @@ GetMetrics gets metrics
 
 An empty list returns if there is no loaded metrics.
 */
-func (a *Client) GetMetrics(params *GetMetricsParams) (*GetMetricsOK, error) {
+func (a *Client) GetMetrics(params *GetMetricsParams, authInfo runtime.ClientAuthInfoWriter) (*GetMetricsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetMetricsParams()
@@ -72,6 +73,7 @@ func (a *Client) GetMetrics(params *GetMetricsParams) (*GetMetricsOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &GetMetricsReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -87,7 +89,7 @@ GetPlugin gets
 
 An error will be returned if the plugin does not exist.
 */
-func (a *Client) GetPlugin(params *GetPluginParams) (*GetPluginOK, error) {
+func (a *Client) GetPlugin(params *GetPluginParams, authInfo runtime.ClientAuthInfoWriter) (*GetPluginOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetPluginParams()
@@ -102,6 +104,7 @@ func (a *Client) GetPlugin(params *GetPluginParams) (*GetPluginOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &GetPluginReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -117,7 +120,7 @@ GetPluginConfigItem gets config
 
 An empty config is returned if there are no configs for the plugin.
 */
-func (a *Client) GetPluginConfigItem(params *GetPluginConfigItemParams) (*GetPluginConfigItemOK, error) {
+func (a *Client) GetPluginConfigItem(params *GetPluginConfigItemParams, authInfo runtime.ClientAuthInfoWriter) (*GetPluginConfigItemOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetPluginConfigItemParams()
@@ -132,6 +135,7 @@ func (a *Client) GetPluginConfigItem(params *GetPluginConfigItemParams) (*GetPlu
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &GetPluginConfigItemReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -147,7 +151,7 @@ GetPlugins gets all
 
 An empty list is returned if there are no loaded plugins.
 */
-func (a *Client) GetPlugins(params *GetPluginsParams) (*GetPluginsOK, error) {
+func (a *Client) GetPlugins(params *GetPluginsParams, authInfo runtime.ClientAuthInfoWriter) (*GetPluginsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetPluginsParams()
@@ -162,6 +166,7 @@ func (a *Client) GetPlugins(params *GetPluginsParams) (*GetPluginsOK, error) {
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &GetPluginsReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -177,7 +182,7 @@ LoadPlugin loads
 
 A plugin binary is required.
 */
-func (a *Client) LoadPlugin(params *LoadPluginParams) (*LoadPluginCreated, error) {
+func (a *Client) LoadPlugin(params *LoadPluginParams, authInfo runtime.ClientAuthInfoWriter) (*LoadPluginCreated, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewLoadPluginParams()
@@ -192,6 +197,7 @@ func (a *Client) LoadPlugin(params *LoadPluginParams) (*LoadPluginCreated, error
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &LoadPluginReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -207,7 +213,7 @@ SetPluginConfigItem sets config
 
 A config is JSON. For example: {"user":"snap", "host":"ocean_eleven"}.
 */
-func (a *Client) SetPluginConfigItem(params *SetPluginConfigItemParams) (*SetPluginConfigItemOK, error) {
+func (a *Client) SetPluginConfigItem(params *SetPluginConfigItemParams, authInfo runtime.ClientAuthInfoWriter) (*SetPluginConfigItemOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSetPluginConfigItemParams()
@@ -222,6 +228,7 @@ func (a *Client) SetPluginConfigItem(params *SetPluginConfigItemParams) (*SetPlu
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &SetPluginConfigItemReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})
@@ -237,7 +244,7 @@ UnloadPlugin unloads
 
 Required fields are plugin type, name and version.
 */
-func (a *Client) UnloadPlugin(params *UnloadPluginParams) (*UnloadPluginNoContent, error) {
+func (a *Client) UnloadPlugin(params *UnloadPluginParams, authInfo runtime.ClientAuthInfoWriter) (*UnloadPluginNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUnloadPluginParams()
@@ -252,6 +259,7 @@ func (a *Client) UnloadPlugin(params *UnloadPluginParams) (*UnloadPluginNoConten
 		Schemes:            []string{"http", "https"},
 		Params:             params,
 		Reader:             &UnloadPluginReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	})

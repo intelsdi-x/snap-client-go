@@ -24,6 +24,7 @@ package tests
 import (
 	"testing"
 
+	openapiclient "github.com/go-openapi/runtime/client"
 	"github.com/intelsdi-x/snap-client-go/client"
 	"github.com/intelsdi-x/snap-client-go/client/plugins"
 	. "github.com/smartystreets/goconvey/convey"
@@ -42,7 +43,7 @@ func TestClient(t *testing.T) {
 		})
 		Convey("Test get a plugin", func() {
 			c := client.NewHTTPClient(nil)
-			_, err := c.Plugins.GetPlugin(plugins.NewGetPluginParams())
+			_, err := c.Plugins.GetPlugin(plugins.NewGetPluginParams(), openapiclient.BasicAuth("snap", "snap"))
 			So(err, ShouldNotBeNil)
 		})
 	})

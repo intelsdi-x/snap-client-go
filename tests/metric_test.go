@@ -44,7 +44,7 @@ func TestGetMetrics(t *testing.T) {
 		Convey("Test get a list of metrics", func() {
 			params := plugins.NewGetMetricsParams()
 
-			resp, err := c.Plugins.GetMetrics(params)
+			resp, err := c.Plugins.GetMetrics(params, nil)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(len(resp.Payload.Metrics), ShouldBeGreaterThanOrEqualTo, 0)
@@ -54,7 +54,7 @@ func TestGetMetrics(t *testing.T) {
 			params := plugins.NewGetMetricsParams()
 			params.SetNs(&ns)
 
-			resp, err := c.Plugins.GetMetrics(params)
+			resp, err := c.Plugins.GetMetrics(params, nil)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(len(resp.Payload.Metrics), ShouldBeGreaterThan, 0)
@@ -65,7 +65,7 @@ func TestGetMetrics(t *testing.T) {
 			params.SetNs(&ns)
 			params.SetVer(&ver)
 
-			resp, err := c.Plugins.GetMetrics(params)
+			resp, err := c.Plugins.GetMetrics(params, nil)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(len(resp.Payload.Metrics), ShouldBeGreaterThan, 0)
