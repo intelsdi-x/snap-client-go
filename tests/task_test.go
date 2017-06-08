@@ -44,7 +44,7 @@ func TestAddTask(t *testing.T) {
 			So(err, ShouldBeNil)
 			params.SetTask(&task)
 
-			resp, err := c.Tasks.AddTask(params)
+			resp, err := c.Tasks.AddTask(params, nil)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 		})
@@ -59,7 +59,7 @@ func TestTask(t *testing.T) {
 		Convey("Test get a list of tasks", func() {
 			params := tasks.NewGetTasksParams()
 
-			resp, err := c.Tasks.GetTasks(params)
+			resp, err := c.Tasks.GetTasks(params, nil)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 			So(len(resp.Payload.Tasks), ShouldBeGreaterThan, 0)
@@ -69,7 +69,7 @@ func TestTask(t *testing.T) {
 				params := tasks.NewGetTaskParams()
 				params.SetID(id)
 
-				resp, err := c.Tasks.GetTask(params)
+				resp, err := c.Tasks.GetTask(params, nil)
 				So(err, ShouldBeNil)
 				So(resp.Payload, ShouldNotBeNil)
 				So(resp.Payload.ID, ShouldEqual, id)
@@ -80,7 +80,7 @@ func TestTask(t *testing.T) {
 				params.SetID(id)
 				params.SetAction("start")
 
-				resp, err := c.Tasks.UpdateTaskState(params)
+				resp, err := c.Tasks.UpdateTaskState(params, nil)
 				So(err, ShouldBeNil)
 				So(resp, ShouldNotBeNil)
 			})
@@ -96,7 +96,7 @@ func TestTask(t *testing.T) {
 				params.SetID(id)
 				params.SetAction("stop")
 
-				resp, err := c.Tasks.UpdateTaskState(params)
+				resp, err := c.Tasks.UpdateTaskState(params, nil)
 				So(err, ShouldBeNil)
 				So(resp, ShouldNotBeNil)
 			})
@@ -105,7 +105,7 @@ func TestTask(t *testing.T) {
 				params := tasks.NewRemoveTaskParams()
 				params.SetID(id)
 
-				_, err := c.Tasks.RemoveTask(params)
+				_, err := c.Tasks.RemoveTask(params, nil)
 				So(err, ShouldBeNil)
 			})
 		})

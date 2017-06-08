@@ -25,6 +25,7 @@ import (
 	"os"
 	"testing"
 
+	openapiclient "github.com/go-openapi/runtime/client"
 	"github.com/intelsdi-x/snap-client-go/client/plugins"
 	. "github.com/smartystreets/goconvey/convey"
 )
@@ -36,7 +37,7 @@ func TestGetPlugins(t *testing.T) {
 		Convey("Test get a list of plugins", func() {
 			params := plugins.NewGetPluginsParams()
 
-			resp, err := c.Plugins.GetPlugins(params)
+			resp, err := c.Plugins.GetPlugins(params, openapiclient.BasicAuth("snap", "snap"))
 			So(err, ShouldBeNil)
 			So(resp.Payload.Plugins, ShouldNotBeNil)
 		})
@@ -47,7 +48,7 @@ func TestGetPlugins(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(2))
 
-			resp, err := c.Plugins.GetPlugin(params)
+			resp, err := c.Plugins.GetPlugin(params, nil)
 			So(err, ShouldBeNil)
 			So(resp.Payload.Name, ShouldEqual, "mock")
 		})
@@ -58,7 +59,7 @@ func TestGetPlugins(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			resp, err := c.Plugins.GetPlugin(params)
+			resp, err := c.Plugins.GetPlugin(params, nil)
 			So(err, ShouldNotBeNil)
 			So(resp, ShouldBeNil)
 		})
@@ -75,7 +76,7 @@ func TestUnloadPlugin(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			resp, err := c.Plugins.UnloadPlugin(params)
+			resp, err := c.Plugins.UnloadPlugin(params, openapiclient.BasicAuth("snap", "snap"))
 			So(err, ShouldBeNil)
 			So(resp, ShouldNotBeNil)
 		})
@@ -86,7 +87,7 @@ func TestUnloadPlugin(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(1))
 
-			resp, err := c.Plugins.UnloadPlugin(params)
+			resp, err := c.Plugins.UnloadPlugin(params, nil)
 			So(err, ShouldNotBeNil)
 			So(resp, ShouldBeNil)
 		})
@@ -106,7 +107,7 @@ func TestLoadPlugin(t *testing.T) {
 			defer f.Close()
 
 			params.SetPluginData(f)
-			resp, err := c.Plugins.LoadPlugin(params)
+			resp, err := c.Plugins.LoadPlugin(params, openapiclient.BasicAuth("snap", "snap"))
 			So(err, ShouldBeNil)
 			So(resp.Payload.Name, ShouldEqual, "mock")
 			So(resp.Payload.Version, ShouldEqual, 1)

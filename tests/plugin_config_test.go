@@ -36,7 +36,7 @@ func TestGetPluginConfigItems(t *testing.T) {
 		Convey("Test get the config without parameters", func() {
 			params := plugins.NewGetPluginConfigItemParams()
 
-			resp, err := c.Plugins.GetPluginConfigItem(params)
+			resp, err := c.Plugins.GetPluginConfigItem(params, nil)
 			So(err, ShouldNotBeNil)
 			So(resp, ShouldBeNil)
 		})
@@ -47,7 +47,7 @@ func TestGetPluginConfigItems(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(2))
 
-			resp, err := c.Plugins.GetPluginConfigItem(params)
+			resp, err := c.Plugins.GetPluginConfigItem(params, nil)
 			So(resp.Payload, ShouldResemble, map[string]interface{}{})
 			So(err, ShouldBeNil)
 		})
@@ -61,7 +61,7 @@ func TestUpdatePluginConfigItems(t *testing.T) {
 		Convey("Test set the plugin config without parameters", func() {
 			params := plugins.NewSetPluginConfigItemParams()
 
-			resp, err := c.Plugins.SetPluginConfigItem(params)
+			resp, err := c.Plugins.SetPluginConfigItem(params, nil)
 			So(err, ShouldNotBeNil)
 			So(resp, ShouldBeNil)
 		})
@@ -72,7 +72,7 @@ func TestUpdatePluginConfigItems(t *testing.T) {
 			params.SetPtype("collector")
 			params.SetPversion(int64(2))
 
-			resp, err := c.Plugins.SetPluginConfigItem(params)
+			resp, err := c.Plugins.SetPluginConfigItem(params, nil)
 			So(err, ShouldNotBeNil)
 			So(resp, ShouldBeNil)
 		})
@@ -85,7 +85,7 @@ func TestUpdatePluginConfigItems(t *testing.T) {
 			cfg := map[string]interface{}{"user": "jean", "someint": 1234567, "somefloat": 3.1418, "somebool": false}
 			params.SetConfig(cfg)
 
-			resp, err := c.Plugins.SetPluginConfigItem(params)
+			resp, err := c.Plugins.SetPluginConfigItem(params, nil)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldResemble, map[string]interface{}{"somebool": false, "somefloat": json.Number("3.1418"), "someint": json.Number("1234567"), "user": "jean"})
 		})
@@ -99,7 +99,7 @@ func TestDeletePluginConfigItems(t *testing.T) {
 		Convey("Test delete the plugin config without parameters", func() {
 			params := plugins.NewDeletePluginConfigItemParams()
 
-			rep, err := c.Plugins.DeletePluginConfigItem(params)
+			rep, err := c.Plugins.DeletePluginConfigItem(params, nil)
 			So(err, ShouldNotBeNil)
 			So(rep, ShouldBeNil)
 		})
@@ -112,7 +112,7 @@ func TestDeletePluginConfigItems(t *testing.T) {
 			cfg := []string{"somefloat"}
 			params.SetConfig(cfg)
 
-			resp, err := c.Plugins.DeletePluginConfigItem(params)
+			resp, err := c.Plugins.DeletePluginConfigItem(params, nil)
 			So(err, ShouldBeNil)
 			So(resp.Payload, ShouldNotBeNil)
 		})
