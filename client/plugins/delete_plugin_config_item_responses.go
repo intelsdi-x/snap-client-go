@@ -37,6 +37,13 @@ func (o *DeletePluginConfigItemReader) ReadResponse(response runtime.ClientRespo
 		}
 		return nil, result
 
+	case 401:
+		result := NewDeletePluginConfigItemUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	default:
 		return nil, runtime.NewAPIError("unknown error", response, response.Code())
 	}
@@ -91,6 +98,35 @@ func (o *DeletePluginConfigItemBadRequest) Error() string {
 func (o *DeletePluginConfigItemBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeletePluginConfigItemUnauthorized creates a DeletePluginConfigItemUnauthorized with default headers values
+func NewDeletePluginConfigItemUnauthorized() *DeletePluginConfigItemUnauthorized {
+	return &DeletePluginConfigItemUnauthorized{}
+}
+
+/*DeletePluginConfigItemUnauthorized handles this case with default header values.
+
+UnauthResponse returns Unauthorized error struct message.
+*/
+type DeletePluginConfigItemUnauthorized struct {
+	Payload *models.UnauthError
+}
+
+func (o *DeletePluginConfigItemUnauthorized) Error() string {
+	return fmt.Sprintf("[DELETE /plugins/{ptype}/{pname}/{pversion}/config][%d] deletePluginConfigItemUnauthorized  %+v", 401, o.Payload)
+}
+
+func (o *DeletePluginConfigItemUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.UnauthError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -33,6 +33,13 @@ func (o *WatchTaskReader) ReadResponse(response runtime.ClientResponse, consumer
 		}
 		return result, nil
 
+	case 401:
+		result := NewWatchTaskUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	case 404:
 		result := NewWatchTaskNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -73,6 +80,35 @@ func (o *WatchTaskOK) readResponse(response runtime.ClientResponse, consumer run
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewWatchTaskUnauthorized creates a WatchTaskUnauthorized with default headers values
+func NewWatchTaskUnauthorized() *WatchTaskUnauthorized {
+	return &WatchTaskUnauthorized{}
+}
+
+/*WatchTaskUnauthorized handles this case with default header values.
+
+UnauthResponse returns Unauthorized error struct message.
+*/
+type WatchTaskUnauthorized struct {
+	Payload *models.UnauthError
+}
+
+func (o *WatchTaskUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /tasks/{id}/watch][%d] watchTaskUnauthorized  %+v", 401, o.Payload)
+}
+
+func (o *WatchTaskUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.UnauthError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

@@ -30,6 +30,13 @@ func (o *RemoveTaskReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return result, nil
 
+	case 401:
+		result := NewRemoveTaskUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	case 404:
 		result := NewRemoveTaskNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -69,6 +76,35 @@ func (o *RemoveTaskNoContent) Error() string {
 func (o *RemoveTaskNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Task)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewRemoveTaskUnauthorized creates a RemoveTaskUnauthorized with default headers values
+func NewRemoveTaskUnauthorized() *RemoveTaskUnauthorized {
+	return &RemoveTaskUnauthorized{}
+}
+
+/*RemoveTaskUnauthorized handles this case with default header values.
+
+UnauthResponse returns Unauthorized error struct message.
+*/
+type RemoveTaskUnauthorized struct {
+	Payload *models.UnauthError
+}
+
+func (o *RemoveTaskUnauthorized) Error() string {
+	return fmt.Sprintf("[DELETE /tasks/{id}][%d] removeTaskUnauthorized  %+v", 401, o.Payload)
+}
+
+func (o *RemoveTaskUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.UnauthError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -34,6 +34,13 @@ func (o *GetMetricsReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return result, nil
 
+	case 401:
+		result := NewGetMetricsUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	case 404:
 		result := NewGetMetricsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -74,6 +81,35 @@ func (o *GetMetricsOK) readResponse(response runtime.ClientResponse, consumer ru
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetMetricsUnauthorized creates a GetMetricsUnauthorized with default headers values
+func NewGetMetricsUnauthorized() *GetMetricsUnauthorized {
+	return &GetMetricsUnauthorized{}
+}
+
+/*GetMetricsUnauthorized handles this case with default header values.
+
+UnauthResponse returns Unauthorized error struct message.
+*/
+type GetMetricsUnauthorized struct {
+	Payload *models.UnauthError
+}
+
+func (o *GetMetricsUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /metrics][%d] getMetricsUnauthorized  %+v", 401, o.Payload)
+}
+
+func (o *GetMetricsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.UnauthError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
