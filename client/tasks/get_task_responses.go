@@ -30,6 +30,13 @@ func (o *GetTaskReader) ReadResponse(response runtime.ClientResponse, consumer r
 		}
 		return result, nil
 
+	case 401:
+		result := NewGetTaskUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	case 404:
 		result := NewGetTaskNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -62,6 +69,35 @@ func (o *GetTaskOK) Error() string {
 func (o *GetTaskOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Task)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetTaskUnauthorized creates a GetTaskUnauthorized with default headers values
+func NewGetTaskUnauthorized() *GetTaskUnauthorized {
+	return &GetTaskUnauthorized{}
+}
+
+/*GetTaskUnauthorized handles this case with default header values.
+
+UnauthResponse returns Unauthorized error struct message.
+*/
+type GetTaskUnauthorized struct {
+	Payload *models.UnauthError
+}
+
+func (o *GetTaskUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /tasks/{id}][%d] getTaskUnauthorized  %+v", 401, o.Payload)
+}
+
+func (o *GetTaskUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.UnauthError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

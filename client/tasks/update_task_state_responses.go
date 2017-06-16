@@ -37,6 +37,13 @@ func (o *UpdateTaskStateReader) ReadResponse(response runtime.ClientResponse, co
 		}
 		return nil, result
 
+	case 401:
+		result := NewUpdateTaskStateUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	case 409:
 		result := NewUpdateTaskStateConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -107,6 +114,35 @@ func (o *UpdateTaskStateBadRequest) Error() string {
 func (o *UpdateTaskStateBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateTaskStateUnauthorized creates a UpdateTaskStateUnauthorized with default headers values
+func NewUpdateTaskStateUnauthorized() *UpdateTaskStateUnauthorized {
+	return &UpdateTaskStateUnauthorized{}
+}
+
+/*UpdateTaskStateUnauthorized handles this case with default header values.
+
+UnauthResponse returns Unauthorized error struct message.
+*/
+type UpdateTaskStateUnauthorized struct {
+	Payload *models.UnauthError
+}
+
+func (o *UpdateTaskStateUnauthorized) Error() string {
+	return fmt.Sprintf("[PUT /tasks/{id}][%d] updateTaskStateUnauthorized  %+v", 401, o.Payload)
+}
+
+func (o *UpdateTaskStateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.UnauthError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

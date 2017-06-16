@@ -37,6 +37,13 @@ func (o *SetPluginConfigItemReader) ReadResponse(response runtime.ClientResponse
 		}
 		return nil, result
 
+	case 401:
+		result := NewSetPluginConfigItemUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	default:
 		return nil, runtime.NewAPIError("unknown error", response, response.Code())
 	}
@@ -91,6 +98,35 @@ func (o *SetPluginConfigItemBadRequest) Error() string {
 func (o *SetPluginConfigItemBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewSetPluginConfigItemUnauthorized creates a SetPluginConfigItemUnauthorized with default headers values
+func NewSetPluginConfigItemUnauthorized() *SetPluginConfigItemUnauthorized {
+	return &SetPluginConfigItemUnauthorized{}
+}
+
+/*SetPluginConfigItemUnauthorized handles this case with default header values.
+
+UnauthResponse returns Unauthorized error struct message.
+*/
+type SetPluginConfigItemUnauthorized struct {
+	Payload *models.UnauthError
+}
+
+func (o *SetPluginConfigItemUnauthorized) Error() string {
+	return fmt.Sprintf("[PUT /plugins/{ptype}/{pname}/{pversion}/config][%d] setPluginConfigItemUnauthorized  %+v", 401, o.Payload)
+}
+
+func (o *SetPluginConfigItemUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.UnauthError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

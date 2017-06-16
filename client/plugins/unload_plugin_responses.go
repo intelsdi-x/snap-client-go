@@ -37,6 +37,13 @@ func (o *UnloadPluginReader) ReadResponse(response runtime.ClientResponse, consu
 		}
 		return nil, result
 
+	case 401:
+		result := NewUnloadPluginUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	case 404:
 		result := NewUnloadPluginNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -114,6 +121,35 @@ func (o *UnloadPluginBadRequest) Error() string {
 func (o *UnloadPluginBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUnloadPluginUnauthorized creates a UnloadPluginUnauthorized with default headers values
+func NewUnloadPluginUnauthorized() *UnloadPluginUnauthorized {
+	return &UnloadPluginUnauthorized{}
+}
+
+/*UnloadPluginUnauthorized handles this case with default header values.
+
+UnauthResponse returns Unauthorized error struct message.
+*/
+type UnloadPluginUnauthorized struct {
+	Payload *models.UnauthError
+}
+
+func (o *UnloadPluginUnauthorized) Error() string {
+	return fmt.Sprintf("[DELETE /plugins/{ptype}/{pname}/{pversion}][%d] unloadPluginUnauthorized  %+v", 401, o.Payload)
+}
+
+func (o *UnloadPluginUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.UnauthError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
