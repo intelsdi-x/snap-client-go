@@ -67,12 +67,12 @@ type LoadPluginParams struct {
 	  CA root certification
 
 	*/
-	CaCerts *os.File
+	CaCerts *string
 	/*PluginCert
 	  Plugin GRPC TLS server certification
 
 	*/
-	PluginCert *os.File
+	PluginCert *string
 	/*PluginData
 	  loads a plugin.
 
@@ -82,7 +82,7 @@ type LoadPluginParams struct {
 	  Plugin GRPC TLS server key
 
 	*/
-	PluginKey *os.File
+	PluginKey *string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -123,24 +123,24 @@ func (o *LoadPluginParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithCaCerts adds the caCerts to the load plugin params
-func (o *LoadPluginParams) WithCaCerts(caCerts *os.File) *LoadPluginParams {
+func (o *LoadPluginParams) WithCaCerts(caCerts *string) *LoadPluginParams {
 	o.SetCaCerts(caCerts)
 	return o
 }
 
 // SetCaCerts adds the caCerts to the load plugin params
-func (o *LoadPluginParams) SetCaCerts(caCerts *os.File) {
+func (o *LoadPluginParams) SetCaCerts(caCerts *string) {
 	o.CaCerts = caCerts
 }
 
 // WithPluginCert adds the pluginCert to the load plugin params
-func (o *LoadPluginParams) WithPluginCert(pluginCert *os.File) *LoadPluginParams {
+func (o *LoadPluginParams) WithPluginCert(pluginCert *string) *LoadPluginParams {
 	o.SetPluginCert(pluginCert)
 	return o
 }
 
 // SetPluginCert adds the pluginCert to the load plugin params
-func (o *LoadPluginParams) SetPluginCert(pluginCert *os.File) {
+func (o *LoadPluginParams) SetPluginCert(pluginCert *string) {
 	o.PluginCert = pluginCert
 }
 
@@ -156,13 +156,13 @@ func (o *LoadPluginParams) SetPluginData(pluginData *os.File) {
 }
 
 // WithPluginKey adds the pluginKey to the load plugin params
-func (o *LoadPluginParams) WithPluginKey(pluginKey *os.File) *LoadPluginParams {
+func (o *LoadPluginParams) WithPluginKey(pluginKey *string) *LoadPluginParams {
 	o.SetPluginKey(pluginKey)
 	return o
 }
 
 // SetPluginKey adds the pluginKey to the load plugin params
-func (o *LoadPluginParams) SetPluginKey(pluginKey *os.File) {
+func (o *LoadPluginParams) SetPluginKey(pluginKey *string) {
 	o.PluginKey = pluginKey
 }
 
@@ -176,26 +176,32 @@ func (o *LoadPluginParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 
 	if o.CaCerts != nil {
 
+		// form param ca_certs
+		var frCaCerts string
 		if o.CaCerts != nil {
-
-			// form file param ca_certs
-			if err := r.SetFileParam("ca_certs", o.CaCerts); err != nil {
+			frCaCerts = *o.CaCerts
+		}
+		fCaCerts := frCaCerts
+		if fCaCerts != "" {
+			if err := r.SetFormParam("ca_certs", fCaCerts); err != nil {
 				return err
 			}
-
 		}
 
 	}
 
 	if o.PluginCert != nil {
 
+		// form param plugin_cert
+		var frPluginCert string
 		if o.PluginCert != nil {
-
-			// form file param plugin_cert
-			if err := r.SetFileParam("plugin_cert", o.PluginCert); err != nil {
+			frPluginCert = *o.PluginCert
+		}
+		fPluginCert := frPluginCert
+		if fPluginCert != "" {
+			if err := r.SetFormParam("plugin_cert", fPluginCert); err != nil {
 				return err
 			}
-
 		}
 
 	}
@@ -215,13 +221,16 @@ func (o *LoadPluginParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 
 	if o.PluginKey != nil {
 
+		// form param plugin_key
+		var frPluginKey string
 		if o.PluginKey != nil {
-
-			// form file param plugin_key
-			if err := r.SetFileParam("plugin_key", o.PluginKey); err != nil {
+			frPluginKey = *o.PluginKey
+		}
+		fPluginKey := frPluginKey
+		if fPluginKey != "" {
+			if err := r.SetFormParam("plugin_key", fPluginKey); err != nil {
 				return err
 			}
-
 		}
 
 	}
