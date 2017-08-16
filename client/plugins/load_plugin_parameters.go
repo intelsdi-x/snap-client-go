@@ -86,13 +86,11 @@ type LoadPluginParams struct {
 
 	*/
 	CaCerts *string
-
 	/*PluginCert
 	  Plugin GRPC TLS server certification
 
 	*/
 	PluginCert *string
-
 	/*PluginData
 	  loads a plugin.
 
