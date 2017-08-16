@@ -86,7 +86,14 @@ func (o *LoadPluginReader) ReadResponse(response runtime.ClientResponse, consume
 		return nil, result
 
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		result := NewLoadPluginDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
 }
 
@@ -268,6 +275,42 @@ func (o *LoadPluginInternalServerError) readResponse(response runtime.ClientResp
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewLoadPluginDefault creates a LoadPluginDefault with default headers values
+func NewLoadPluginDefault(code int) *LoadPluginDefault {
+	return &LoadPluginDefault{
+		_statusCode: code,
+	}
+}
+
+/*LoadPluginDefault handles this case with default header values.
+
+ErrorStringResponse represents an error in the string format.
+
+It includes an error message only.
+*/
+type LoadPluginDefault struct {
+	_statusCode int
+
+	Message string
+}
+
+// Code gets the status code for the load plugin default response
+func (o *LoadPluginDefault) Code() int {
+	return o._statusCode
+}
+
+func (o *LoadPluginDefault) Error() string {
+	return fmt.Sprintf("[POST /plugins][%d] loadPlugin default ", o._statusCode)
+}
+
+func (o *LoadPluginDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header message
+	o.Message = response.GetHeader("message")
 
 	return nil
 }
