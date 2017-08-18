@@ -83,6 +83,11 @@ type LoadPluginParams struct {
 
 	*/
 	PluginKey *string
+	/*PluginURI
+	  Stand-alone plugin URI
+
+	*/
+	PluginURI *string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -166,6 +171,17 @@ func (o *LoadPluginParams) SetPluginKey(pluginKey *string) {
 	o.PluginKey = pluginKey
 }
 
+// WithPluginURI adds the pluginURI to the load plugin params
+func (o *LoadPluginParams) WithPluginURI(pluginURI *string) *LoadPluginParams {
+	o.SetPluginURI(pluginURI)
+	return o
+}
+
+// SetPluginURI adds the pluginUri to the load plugin params
+func (o *LoadPluginParams) SetPluginURI(pluginURI *string) {
+	o.PluginURI = pluginURI
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *LoadPluginParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -229,6 +245,22 @@ func (o *LoadPluginParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		fPluginKey := frPluginKey
 		if fPluginKey != "" {
 			if err := r.SetFormParam("plugin_key", fPluginKey); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if o.PluginURI != nil {
+
+		// form param plugin_uri
+		var frPluginURI string
+		if o.PluginURI != nil {
+			frPluginURI = *o.PluginURI
+		}
+		fPluginURI := frPluginURI
+		if fPluginURI != "" {
+			if err := r.SetFormParam("plugin_uri", fPluginURI); err != nil {
 				return err
 			}
 		}
