@@ -31,10 +31,6 @@ then
     rm -rf ${__dir}/../client
     rm -rf ${__dir}/../models
     swagger generate client -f ${__file} -A snap -a snap
-    for f in $(find client -name '*.go') $(find models -name '*.go'); do
-      cat scripts/license_header $f > $f.new
-      mv $f.new $f
-    done
 else
     msg="${__file} not found.
         please run the following command to get Snap in your GOPATH.
