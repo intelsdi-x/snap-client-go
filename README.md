@@ -259,7 +259,7 @@ This repository is one of many in the Snap framework and [has maintainers suppor
 We encourage contributions from the community.
 
 * _Contributors_: We always appreciate more eyes on the core framework and Snap CLIs
-* _Feedback_: try it and tell us about it on [our Slack team](https://intelsdi-x.herokuapp.com/), through [a blog posts](https://medium.com/intel-sdi/) or Twitter with #SnapTelemetry
+* _Feedback_: try it and tell us about it on [our Slack team](https://intelsdi-x.herokuapp.com/) or through [a blog posts](https://medium.com/intel-sdi/)
 * _Integrations_: snap-cli uses [snap-client-go](https://github.com/intelsdi-x/snap-client-go)
 
 To contribute to the Snap framework, see our [CONTRIBUTING.md](https://github.com/intelsdi-x/snap/blob/master/CONTRIBUTING.md) file. To give back to a specific plugin, open an issue on its repository. Snap maintainers aim to address comments and questions as quickly as possible. To get some attention on an issue, reach out to us [on Slack](http://slack.snap-telemetry.io), or open an issue to get a conversation started.
@@ -277,7 +277,7 @@ and not by creating a GitHub issue. We will follow up with you promptly with mor
 
 ## License
 
-Snap Client Go is Open Source software released under the [Apache 2.0 License](LICENSE).
+Snap Client Go is an Open Source software released under the [Apache 2.0 License](LICENSE).
 
 ## Thank You
 
