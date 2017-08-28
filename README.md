@@ -262,7 +262,7 @@ We encourage contributions from the community.
 * _Feedback_: try it and tell us about it on [our Slack team](https://intelsdi-x.herokuapp.com/) or through [a blog posts](https://medium.com/intel-sdi/)
 * _Integrations_: snap-cli uses [snap-client-go](https://github.com/intelsdi-x/snap-client-go)
 
-To contribute to the Snap framework, see our [CONTRIBUTING.md](https://github.com/intelsdi-x/snap/blob/master/CONTRIBUTING.md) file. To give back to a specific plugin, open an issue on its repository. Snap maintainers aim to address comments and questions as quickly as possible. To get some attention on an issue, reach out to us [on Slack](http://slack.snap-telemetry.io), or open an issue to get a conversation started.
+To contribute to the Snap framework, see our [CONTRIBUTING.md](CONTRIBUTING.md) file. To give back to a specific plugin, open an issue on its repository. Snap maintainers aim to address comments and questions as quickly as possible. To get some attention on an issue, reach out to us [on Slack](http://slack.snap-telemetry.io), or open an issue to get a conversation started.
 
 
 ## Code of Conduct
